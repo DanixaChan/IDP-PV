@@ -1,3 +1,16 @@
-h1{
-    color: peru;
+.navbar{  
+    background-color: #393E46;
+}
+
+
+nav div ul .nav-item .nav-lk{
+    color: #EEEEEE !important;    
+}
+
+.dropdown-menu{
+    background-color: #222831 !important;
+}
+
+.droplk:hover{
+    color: #222831 !important;
 }
