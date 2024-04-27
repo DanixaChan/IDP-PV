@@ -1,10 +1,13 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory
 import os
-
 
 template_dir = os.path.abspath('../templates')
 
 app = Flask(__name__, template_folder=template_dir, static_folder='../static')
+
+@app.route('/img/icono_emp.png')
+def img():
+    return send_from_directory(app.static_folder, 'icono_emp.png')
 
 @app.route('/')
 def index():

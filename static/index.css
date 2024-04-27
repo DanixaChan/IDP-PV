@@ -1,16 +1,42 @@
-.navbar{  
-    background-color: #393E46;
+.navbar{
+    display: flex;
+    width: 100% !important;
+    background-color: #222831;
 }
 
-
-nav div ul .nav-item .nav-lk{
+nav div ul .nav-item .nav-lk, .navbar-brand, #slash_logreg{
     color: #EEEEEE !important;    
 }
+
+nav div ul .nav-item .nav-lk{
+    font-size: 20px;
+}
+nav div .show  ul .nav-item, nav div .show  ul .session{
+    display: flex;
+    justify-content: center;
+    left: 0;
+}
+
+nav div ul .session{
+    position: relative;
+    top: 0;
+    left: 90%;
+}
+/* position-relative top-0 start-100  */
+
+.show ul #slash_logreg{
+    display: none;
+}
+
+.navbar-brand{
+    font-size: 30px !important;
+}
+
 
 .dropdown-menu{
     background-color: #222831 !important;
 }
 
-.droplk:hover{
-    color: #222831 !important;
+#dropitem:hover{
+    background-color: #393E46 !important;
 }

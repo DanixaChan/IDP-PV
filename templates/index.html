@@ -7,35 +7,41 @@
     <title>postventa</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
+    <link rel= "stylesheet" href= "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" >
+  </head>
 <body>
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-xl">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar</a>
+          <img src="{{ url_for('static', filename='img/icono_emp.png') }}" alt="PingüinoGamer" height="80">
+          <a class="navbar-brand me-5" href="#">PingüinoGamer</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class="las la-list-ul" style="border: none; color: #EEEEEE; font-size: 45px;"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active nav-lk" aria-current="page" href="#">Inicio</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link nav-lk" href='/registros'>Registros</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle nav-lk" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Generar
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item nav-lk droplk" href="#">Boleta</a></li>
-                  <li><a class="dropdown-item nav-lk droplk" href="#">Orden de Despacho</a></li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link nav-lk" href="#">Iniciar Sesión</a>
-              </li>
-            </ul>
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link active nav-lk" aria-current="page" href="#">Inicio</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link nav-lk" href='/registros'>Registros</a>
+                </li>
+                <li class="nav-item dropdown d-flex align-items-center flex-column align-self-start container-fluid">
+                  <a class="nav-link dropdown-toggle nav-lk" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Generar
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a id="dropitem" class="dropdown-item nav-lk" href="#">Boleta</a></li>
+                    <li><a id="dropitem" class="dropdown-item nav-lk" href="#">Orden de Despacho</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item session">
+                  <a id="login_link" class="nav-link nav-lk" href="#">Iniciar Sesión</a>
+                </li>
+                <h4 id="slash_logreg" class="session">/</h4>
+                <li class="nav-item session">
+                  <a id="register_link" class="nav-link nav-lk" href="#">Registrarse</a>
+                </li>
+              </ul>
           </div>
         </div>
       </nav>
