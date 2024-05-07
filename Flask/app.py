@@ -17,9 +17,9 @@ def index():
 def registros():
     return render_template('registros.html')
 
-@app.route('/g_boleta')
+@app.route('/b_boleta')
 def gboleta():
-    return render_template('gboleta.html')
+    return render_template('b_boleta.html')
 
 @app.route('/go_despacho')
 def godespacho():
