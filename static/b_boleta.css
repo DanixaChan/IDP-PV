@@ -49,13 +49,11 @@
     width: 100% !important;
     padding: 3% 6% !important;
     margin: 0 !important;
-    z-index: -2;
 }
 
 .cont-div{
     padding: 0.7%;
     position: relative;
-    z-index: -1;
 }
 
 .subtitle{

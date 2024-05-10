@@ -12,16 +12,17 @@ nav div ul .nav-item .nav-lk, .navbar-brand, #slash_logreg{
 nav div ul .nav-item .nav-lk{
     font-size: 20px;
 }
-nav div .show  ul .nav-item, nav div .show  ul .session{
+nav div .show  ul .nav-item, nav div .show  ul .session, nav div .show ul .nav-item #login_link{
     display: flex;
     justify-content: center;
-    left: 0;
+    position: relative;
+    left: 0%;
 }
 
 nav div ul .session{
     position: relative;
     top: 0;
-    left: 90%;
+    left: 170%;
 }
 
 .show ul #slash_logreg{
@@ -39,4 +40,10 @@ nav div ul .session{
 
 #dropitem:hover{
     background-color: #393E46 !important;
+}
+
+nav div ul .nav-item #login_link{
+    width: 200%;
+    position: relative;
+    right: 90%;
 }

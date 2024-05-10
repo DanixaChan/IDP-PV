@@ -13,10 +13,6 @@ def img():
 def index():
     return render_template('index.html')
 
-@app.route('/reg_ventas')
-def registros():
-    return render_template('registros.html')
-
 @app.route('/b_boleta')
 def gboleta():
     return render_template('b_boleta.html')

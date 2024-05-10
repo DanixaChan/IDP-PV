@@ -3,7 +3,7 @@
     display: flex;
     width: 100% !important;
     background-color: #222831;
-    position: relative;
+    position: fixed;
     left: 0;
     bottom: 0;
 }
@@ -28,5 +28,6 @@
 }
 
 h5{
+    font-size: 100%;
     color: #EEEEEE;
 }
