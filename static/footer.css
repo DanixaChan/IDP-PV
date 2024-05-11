@@ -3,11 +3,12 @@
     display: flex;
     width: 100% !important;
     background-color: #222831;
-    position: fixed;
+    position: sticky;
     left: 0;
-    bottom: 0;
-    width: 100%;
+    bottom: 0%;
+    z-index: 100;
 }
+
 
 .foot-brand, .sub-brand{
     color: #EEEEEE;
@@ -22,12 +23,24 @@
     font-size: 20px;
 }
 
-.contact-area{
-    margin-right: 5%;
-    padding: auto;
-    width: 25%;
+#contact-area{
+    position: relative;
+    top: 0;
+    margin: 0;
+    padding: 0;
 }
 
 h5{
     color: #EEEEEE;
+}
+
+.contact-e{
+    width: 25%;
+    padding: 0;
+    margin: 0;
+}
+
+#whatsapp-text{
+    position: relative;
+    right: 5%;
 }

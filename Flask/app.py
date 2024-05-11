@@ -9,21 +9,21 @@ app = Flask(__name__, template_folder=template_dir, static_folder='../static')
 def img():
     return send_from_directory(app.static_folder, 'icono_emp.png')
 
+@app.route('/img/test-img-prod.jpg')
+def img_prod():
+    return send_from_directory(app.static_folder, 'test-img-prod.jpg')
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/reg_ventas')
-def registros():
-    return render_template('registros.html')
-
-@app.route('/g_boleta')
+@app.route('/b_boleta')
 def gboleta():
-    return render_template('gboleta.html')
+    return render_template('b_boleta.html')
 
 @app.route('/go_despacho')
 def godespacho():
-    return render_template('godespacho.html')
+    return render_template('go_despacho.html')
 
 @app.route('/login')
 def login():

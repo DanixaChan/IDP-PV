@@ -9,14 +9,14 @@
   </head>
 <body>
     {% block footer %}
-    <nav class="navbar navbar-expand-xl d-flex justify-content-between footer">
-        <div class="container-fluid d-flex m-1 flex-column">
+    <nav class="navbar navbar-expand-xl d-flex justify-content-between mt-5 footer">
+        <div class="container-fluid col d-flex m-1 flex-column">
           <a class="navbar-brand foot-brand me-auto">Toda ayuda es bienvenida</a>
           <h5 class="sub-brand me-auto">No dudes en contactarnos! 🐧🤍</h5>
         </div>          
-        <div class="contact-area">
-            <h5><i class="lab la-whatsapp"></i>Whatsapp: +56 9 XXX XXX XX</h5>
-            <h5><i class="lab la-instagram"></i>Instagram: @postventa</h5>
+        <div id="contact-area" class="col d-flex flex-column flex-row-reverse">
+            <h5 id="whatsapp-text" class="contact-e"><i class="lab la-whatsapp"></i>Whatsapp: <br>+56 9 XXX XXX XX</h5>
+            <h5 class="contact-e"><i class="lab la-instagram"></i>Instagram: <br>@postventa</h5>
         </div>
       </nav>
     {% endblock %}
