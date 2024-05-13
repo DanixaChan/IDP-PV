@@ -25,10 +25,11 @@ nav div ul .nav-item .nav-lk{
     font-size: 20px;
     margin-left: 5%;  
 }
-nav div .show  ul .nav-item, nav div .show  ul .session{
+nav div .show  ul .nav-item, nav div .show  ul .session, nav div .show ul .nav-item #login_link{
     display: flex;
     justify-content: center;
-    left: 0;
+    position: relative;
+    left: 0%;
 }
 
 nav div ul .session{
