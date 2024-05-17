@@ -1,3 +1,27 @@
+@keyframes flip-yr {
+    0% {
+        transform: rotateY(0);
+    }
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+@keyframes flip-yr2{
+    0% {
+        transform: rotateY(0);
+        opacity: 1;
+        z-index: 1;
+    }
+    50% {
+        transform: rotateY(60);
+        opacity: 0.5;
+    }
+    100% {
+        transform: rotateY(190deg);
+        opacity: 0;
+        z-index: -1;
+    }
+}
 html, body {
     width: 100%;
     height: 100vh;
@@ -84,4 +108,58 @@ body::before {
 .i-card{
     font-size: 120px;
     margin: 5% 0%;
+}
+
+.show-behind-card .card-body .btn-accesslink, .behind-card .card-body .card-title{
+    margin-top: 45%;
+}
+
+.front-card *{
+    user-select: none;
+}
+
+.flip-ani2{ 
+    animation: flip-yr2 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+    animation-fill-mode: forwards;
+}
+
+.flip-ani{ 
+    animation: flip-yr 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+    animation-fill-mode: forwards;
+}
+
+.front-card{
+    position: absolute;
+    right: 6%;
+}
+
+.show-front-card {
+    transform-style: preserve-3d;
+}
+
+.behind-card {
+    pointer-events: none !important;
+}
+
+.show-behind-card {
+    pointer-events: all !important;
+
+}
+
+.behind-card, .show-behind-card{
+    position: relative !important;
+    right: -15.3% !important;
+    display: flex !important;
+    align-items: center !important;
+    align-content: center !important;
+    justify-content: center !important;
+    background-color: #222831 !important;
+    color: #EEEEEE !important;
+    font-size: 200% !important;
+    z-index: 0;
+}
+
+.btn-accesslink {
+    width: 100%;
+    pointer-events: auto; /* Permitir interacción con el botón */
 }

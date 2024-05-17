@@ -14,25 +14,43 @@
     <div class="container-fluid row d-flex justify-content-center cont-div">
       <div class="container-fluid">
         <div class="container-fluid row" style="background-color: #222831;">
-          <h1 class="col m-3" style="color: #EEEEEE;">BIENVENIDO AL ÁREA DE POST-VENTA</h1>
+          <marquee behavior="slide" direction="left" scrollamount="30"><h1 class="col m-3" style="color: #EEEEEE;">BIENVENIDO AL ÁREA DE POST-VENTA</h1></marquee>
         </div>
         <h2 class="row subtitle">¿Que funciones estamos realizando?</h2>
         <div class="container-fluid row cards-area">
-          <div class="card" style="width: 18rem;">
+          <div class="card behind-card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Ir Página</h5>
+              <button type="button" class="btn btn-outline-light btn-accesslink">Acceder</button>
+            </div>
+          </div>
+          <div class="card front-card" style="width: 18rem;">
             <div class="d-flex"><i class="las la-file i-card"></i><i class="las la-cash-register i-card"></i></div>
             <div class="card-body">
               <h5 class="card-title">Buscamos Boletas</h5>
               <p class="card-text">Nos encargamos de buscar registros de compras en base a la compra generada anteriormente.</p>
             </div>
           </div>
-          <div class="card" style="width: 18rem;">
+          <div class="card behind-card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Ir Página</h5>
+              <button type="button" class="btn btn-outline-light btn-accesslink">Acceder</button>
+            </div>
+          </div>
+          <div class="card front-card" style="width: 18rem;">
             <div class="d-flex"><i class="las la-money-bill-wave-alt i-card"></i><i class="las la-hand-holding-usd i-card"></i></div>
             <div class="card-body">
               <h5 class="card-title">Realizamos devoluciones</h5>
               <p class="card-text">En caso de que se solicite el servicio de devolución, nosotros procedemos a ello.</p>
             </div>
           </div>
-          <div class="card" style="width: 18rem;">
+          <div class="card behind-card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Ir Página</h5>
+              <button type="button" class="btn btn-outline-light btn-accesslink">Acceder</button>
+            </div>
+          </div>
+          <div class="card front-card" style="width: 18rem;">
             <div class="d-flex"><i class="las la-truck i-card"></i><i class="las la-dolly i-card"></i></div>
             <div class="card-body">
               <h5 class="card-title">Generamos ordenes de despacho</h5>
@@ -44,5 +62,6 @@
     </div>
     {% include 'footer.html' %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='scripts/index.js') }}"></script>
 </body>
 </html>
