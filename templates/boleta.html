@@ -7,7 +7,7 @@
     <title>postventa</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='b_boleta.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel= "stylesheet" href= "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" />
+    <link rel= "stylesheet" href= "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" >
   </head>
 <body>
     {% include "header.html" %}
@@ -29,25 +29,31 @@
                     <h6 class="card-subtitle mb-2 text-body-secondary">Rellene los datos necesarios para la búsquedad</h6>
                 </div>
                 <form>
-                  <div class="input-group mb-3">
-                    <label for="id_compra" class="form-label">Id compra:</label>
-                    <input type="text" class="form-control" id="id_compra" aria-describedby="emailHelp">
-                  </div>
-                    <div class="form-group">
-                       <div class='input-group date' id='datetimepicker5'>
-                          <input type="datetime-local" step="1">
-                          <!-- <span class="las la-calendar"></span> -->
-                          </span>
-                       </div>
+                    <div class="input-group mb-3">
+                      <label for="id_compra" class="form-label">Id compra:</label>
+                      <input type="text" class="form-control" id="id_compra" aria-describedby="emailHelp">
                     </div>
+                    <div class="form-group">
+                        <div class='input-group date' id='datetimepicker3'>
+                           <input type='text' class="form-control" />
+                           <span class="input-group-addon">
+                           <span class="glyphicon glyphicon-time"></span>
+                           </span>
+                        </div>
+                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+                  </form>
             </div>
         </div>
     </div>
     {% include 'footer.html' %}
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker3').datetimepicker({
+                format: 'LT'
+            });
+        });
+     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
-
-  </body>
+</body>
 </html>

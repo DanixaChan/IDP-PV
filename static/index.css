@@ -148,7 +148,7 @@ body::before {
 
 .behind-card, .show-behind-card{
     position: relative !important;
-    right: -15.3% !important;
+    right: -14.3% !important;
     display: flex !important;
     align-items: center !important;
     align-content: center !important;
