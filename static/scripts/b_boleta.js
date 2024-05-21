@@ -1,3 +1,5 @@
+// b_boleta.js
+
 const input = document.querySelector(".form-control");
 const calendar = document.getElementById("calend-compra");
 const form = document.getElementById("form-filt");

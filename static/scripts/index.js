@@ -1,3 +1,4 @@
+// index.js
 document.addEventListener("DOMContentLoaded", function () {
   const frontCard1 = document.getElementById("frcard-1");
   const frontCard2 = document.getElementById("frcard-2");
