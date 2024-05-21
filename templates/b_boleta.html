@@ -1,4 +1,3 @@
-<!-- b_boleta.html -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,58 +22,47 @@
         <div class="card-body">
           <h5 class="card-title">Id: </h5>
           <p class="card-text">Fecha: </p>
+          <p class="card-text">Nombre Comprador: </p>
+          <p class="card-text">RUT Comprador: </p>
           <a id="myInput" class="btn btn-select" data-bs-toggle="modal" data-bs-target="#myModal">Seleccionar</a>
-
         </div>
       </div>
     </div>
 
     <div id="navigation-bol">
       <button type="button" id="previousPageBtn" class="btn btn-back"><</button>
-        <div id="pagination">
-        </div>
+      <div id="pagination">
+      </div>
       <button type="button" id="nextPageBtn" class="btn btn-next">></button>
     </div>
 
-    <div id="buscador" class="card mt-5" style="width: 20rem;
-      position: fixed;
-      right: 5% !important;">
+    <div id="buscador" class="card mt-5" style="width: 20rem; position: fixed; right: 5% !important;">
       <form id="form-filt" class="card-body needs-validation" novalidate>
         <div class="desc-form">
           <h5 class="card-title">Filtrar boletas</h5>
           <h6 class="card-subtitle mb-2 text-body-secondary">Rellene los datos necesarios para filtrar</h6>
         </div>
-        <form>
-          <div class="input-group mb-3">
-            <label for="id_compra" class="form-label">Id compra:</label>
-            <input type="text" class="form-control" id="id_compra" aria-describedby="Id compra:" pattern="^\d+$"
-              required>
-            <div class="valid-feedback text-center">👍
-            </div>
-            <div class="invalid-feedback text-center">
-              Debe colocar un número!
-            </div>
+        <div class="input-group mb-3">
+          <label for="id_compra" class="form-label">Id compra:</label>
+          <input type="text" class="form-control" id="id_compra" aria-describedby="Id compra:" pattern="^\d+$" required>
+          <div class="valid-feedback text-center">👍</div>
+          <div class="invalid-feedback text-center">Debe colocar un número!</div>
+        </div>
+        <div class="form-group">
+          <div class='input-group date mb-3' id='datetimepicker5'>
+            <label for="calend-compra" class="form-label">Fecha de compra:</label>
+            <input id="calend-compra" class="form-control" type="datetime-local" step="1" required>
+            <div class="valid-feedback text-center">👍</div>
+            <div class="invalid-feedback text-center">Debe colocar una fecha!</div>
           </div>
-          <div class="form-group">
-            <div class='input-group date mb-3' id='datetimepicker5'>
-              <label for="calend-compra" class="form-label">Fecha de compra:</label>
-              <input id="calend-compra" class="form-control" type="datetime-local" step="1" required>
-              <div class="valid-feedback text-center">👍
-              </div>
-              <div class="invalid-feedback text-center">
-                Debe colocar una fecha!
-              </div>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-filtrar">Filtrar</button>
-        </form>
+        </div>
+        <button type="submit" class="btn btn-filtrar">Filtrar</button>
+      </form>
     </div>
   </div>
-  </div>
-  
+
   <!-- Modal -->
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-    aria-hidden="true">
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -83,6 +71,8 @@
         </div>
         <div class="modal-body">
           <h5 class="card-title">Id: </h5>
+          <p class="card-text">Nombre Comprador: </p>
+          <p class="card-text">RUT Comprador: </p>
           <p class="card-text">Comprador: </p>
           <p class="card-text">Productos: </p>
           <p class="card-text">Fecha: </p>
@@ -95,15 +85,10 @@
       </div>
     </div>
   </div>
-  {% include 'footer.html' %}  
-  <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
-  integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script>
+  {% include 'footer.html' %}
+  <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="{{ url_for('static', filename='scripts/b_boleta.js') }}"></script>
 </body>
 
