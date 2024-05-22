@@ -1,14 +1,12 @@
-<!-- go_despacho -->
+<!-- go_despacho.html -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orden de Despacho</title>
-    <link rel="stylesheet" href="/static/b_boleta.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='b_boleta.css') }}">
 </head>
-
 <body>
     {% include "header.html" %}
     <div class="container">
@@ -18,9 +16,6 @@
         </div>
     </div>
     {% include "footer.html" %}
-    <script src="/static/scripts/go_despacho.js"></script>
-
-
+    <script src="{{ url_for('static', filename='script/go_despacho.js') }}"></script>
 </body>
-
 </html>
