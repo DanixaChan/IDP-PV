@@ -1,6 +1,4 @@
-#app.py
-
-from flask import Flask, render_template, send_from_directory, jsonify
+from flask import Flask, render_template, send_from_directory, jsonify, request
 import os
 import requests
 from config import Config
@@ -121,6 +119,22 @@ def initdb():
     db.session.add_all([despacho1, despacho2, despacho3])
     db.session.commit()
     return 'Database initialized with sample data'
+
+# Ruta para obtener los datos desde la instancia de EC2
+@app.route('/obtener_datos_ec2')
+def obtener_datos_ec2():
+    # Hacer una solicitud GET a la instancia de EC2 para obtener los datos
+    response = requests.get('http://44.205.221.190:8000/despachos')
+    
+    # Verificar si la solicitud fue exitosa (código de estado 200)
+    if response.status_code == 200:
+        # Obtener los datos del cuerpo de la respuesta JSON
+        datos = response.json()
+        # Renderizar la plantilla go_despacho.html con los datos recibidos
+        return render_template('go_despacho.html', datos=datos)
+    else:
+        # Si la solicitud no fue exitosa, mostrar un mensaje de error
+        return 'Error al obtener los datos de la instancia de EC2'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
