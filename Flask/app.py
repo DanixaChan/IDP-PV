@@ -1,10 +1,10 @@
-# app.py
+#app.py
 
 from flask import Flask, render_template, send_from_directory, jsonify
 import os
 import requests
 from config import Config
-from models import db, Boleta, OrdenDespacho
+from models import db, Boleta, Despacho
 
 template_dir = os.path.abspath('../templates')
 
@@ -51,7 +51,7 @@ def obtener_boletas_externas():
         return []
 
 def obtener_ordenes_despacho_externas():
-    response = requests.get(app.config['http://44.205.221.190:8000/despachos/'])
+    response = requests.get('http://44.205.221.190:8000/despachos/')
     if response.status_code == 200:
         return response.json()
     else:
@@ -70,13 +70,16 @@ def almacenar_boletas_en_interna(boletas):
 
 def almacenar_ordenes_despacho_en_interna(ordenes):
     for orden in ordenes:
-        nueva_orden = OrdenDespacho(
-            id=orden['id'],
-            numero=orden['numero'],
-            fecha=orden['fecha'],
-            estado=orden['estado']
+        nuevo_despacho = Despacho(
+            fecha_despacho=orden['fecha_despacho'],
+            patente_camion=orden['patente_camion'],
+            intento=orden['intento'],
+            entregado=orden['entregado'],
+            id_compra=orden['id_compra'],
+            direccion_compra=orden['direccion_compra'],
+            valor_compra=orden['valor_compra']
         )
-        db.session.add(nueva_orden)
+        db.session.add(nuevo_despacho)
     db.session.commit()
 
 @app.route('/sincronizar_boletas')
@@ -98,8 +101,26 @@ def mostrar_boletas():
 
 @app.route('/ordenes_despacho')
 def mostrar_ordenes_despacho():
-    ordenes = OrdenDespacho.query.all()
+    ordenes = Despacho.query.all()
     return render_template('ordenes_despacho.html', ordenes=ordenes)
 
+@app.route('/initdb')
+def initdb():
+    despacho1 = Despacho(
+        fecha_despacho='2024-05-22', patente_camion='ABC123', intento=1, entregado=True,
+        id_compra='C123', direccion_compra='123 Calle Falsa', valor_compra=100.0
+    )
+    despacho2 = Despacho(
+        fecha_despacho='2024-05-23', patente_camion='DEF456', intento=2, entregado=False,
+        id_compra='C124', direccion_compra='456 Calle Verdadera', valor_compra=200.0
+    )
+    despacho3 = Despacho(
+        fecha_despacho='2024-05-24', patente_camion='GHI789', intento=3, entregado=True,
+        id_compra='C125', direccion_compra='789 Calle Imaginaria', valor_compra=300.0
+    )
+    db.session.add_all([despacho1, despacho2, despacho3])
+    db.session.commit()
+    return 'Database initialized with sample data'
+
 if __name__ == '__main__':
-    app.run(host=None, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
