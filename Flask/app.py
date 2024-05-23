@@ -103,24 +103,6 @@ def mostrar_ordenes_despacho():
     ordenes = Despacho.query.all()
     return render_template('ordenes_despacho.html', ordenes=ordenes)
 
-@app.route('/initdb')
-def initdb():
-    despacho1 = Despacho(
-        fecha_despacho='2024-05-22', patente_camion='ABC123', intento=1, entregado=True,
-        id_compra='C123', direccion_compra='123 Calle Falsa', valor_compra=100.0
-    )
-    despacho2 = Despacho(
-        fecha_despacho='2024-05-23', patente_camion='DEF456', intento=2, entregado=False,
-        id_compra='C124', direccion_compra='456 Calle Verdadera', valor_compra=200.0
-    )
-    despacho3 = Despacho(
-        fecha_despacho='2024-05-24', patente_camion='GHI789', intento=3, entregado=True,
-        id_compra='C125', direccion_compra='789 Calle Imaginaria', valor_compra=300.0
-    )
-    db.session.add_all([despacho1, despacho2, despacho3])
-    db.session.commit()
-    return 'Database initialized with sample data'
-
 # Ruta para obtener los datos desde la instancia de EC2
 @app.route('/obtener_datos_ec2')
 def obtener_datos_ec2():
@@ -132,10 +114,10 @@ def obtener_datos_ec2():
         # Obtener los datos del cuerpo de la respuesta JSON
         datos = response.json()
         # Renderizar la plantilla go_despacho.html con los datos recibidos
-        return render_template('go_despacho.html', datos=datos)
+        return jsonify(datos)
     else:
         # Si la solicitud no fue exitosa, mostrar un mensaje de error
-        return 'Error al obtener los datos de la instancia de EC2'
+        return f'Error al obtener los datos de la instancia de EC2: {str(e)}', 500
 
 
 if __name__ == '__main__':
