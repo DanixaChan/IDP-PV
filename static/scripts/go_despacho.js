@@ -1,11 +1,12 @@
 // go_despacho.js
 
-const url = 'http://44.205.221.190:8000/despachos/';
+let url = 'http://44.205.221.190:8000/despachos/';
 
 async function obtenerDatosDespacho() {
     try {
         const response = await fetch(url);
         const data = await response.json();
+        console.log(data)
         
         if (Array.isArray(data.results)) {
             mostrarDespachos(data.results);

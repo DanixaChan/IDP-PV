@@ -41,6 +41,7 @@ def login():
 def register():
     return render_template('register.html')
 
+
 def obtener_boletas_externas():
     response = requests.get(app.config['API_BOLETAS_URL'])
     if response.status_code == 200:
@@ -124,7 +125,7 @@ def initdb():
 @app.route('/obtener_datos_ec2')
 def obtener_datos_ec2():
     # Hacer una solicitud GET a la instancia de EC2 para obtener los datos
-    response = requests.get('http://44.205.221.190:8000/despachos')
+    response = requests.get('http://44.205.221.190:8000/despachos', timeout=10)
     
     # Verificar si la solicitud fue exitosa (código de estado 200)
     if response.status_code == 200:
@@ -135,6 +136,7 @@ def obtener_datos_ec2():
     else:
         # Si la solicitud no fue exitosa, mostrar un mensaje de error
         return 'Error al obtener los datos de la instancia de EC2'
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
