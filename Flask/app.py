@@ -31,7 +31,8 @@ def gboleta():
 
 @app.route('/go_despacho')
 def godespacho():
-    return render_template('go_despacho.html')
+    ordenes = Despacho.query.all()
+    return render_template('go_despacho.html', ordenes=ordenes)
 
 @app.route('/login')
 def login():

@@ -18,44 +18,42 @@ async function obtenerDatosDespacho() {
 }
 
 function mostrarDespachos(despachos) {
-    const despachoContainer = document.querySelector('.despacho-container');
-    despachoContainer.innerHTML = '';
+    const despachoTableBody = document.getElementById('despachoTableBody');
+
+    despachoTableBody.innerHTML = '';
 
     despachos.forEach(despacho => {
-        const despachoElement = document.createElement('div');
-        despachoElement.classList.add('despacho-item');
+        const row = document.createElement('tr');
 
-        const fechaDespacho = document.createElement('p');
-        fechaDespacho.textContent = `Fecha de despacho: ${despacho.fecha_despacho}`;
+        const fechaDespacho = document.createElement('td');
+        fechaDespacho.textContent = despacho.fecha_despacho;
+        row.appendChild(fechaDespacho);
 
-        const patenteCamion = document.createElement('p');
-        patenteCamion.textContent = `Patente del camión: ${despacho.patente_camion}`;
+        const patenteCamion = document.createElement('td');
+        patenteCamion.textContent = despacho.patente_camion;
+        row.appendChild(patenteCamion);
 
-        const intento = document.createElement('p');
-        intento.textContent = `Intento: ${despacho.intento}`;
+        const intento = document.createElement('td');
+        intento.textContent = despacho.intento;
+        row.appendChild(intento);
 
-        const entregado = document.createElement('p');
-        entregado.textContent = `Entregado: ${despacho.entregado ? 'Sí' : 'No'}`;
+        const entregado = document.createElement('td');
+        entregado.textContent = despacho.entregado ? 'Sí' : 'No';
+        row.appendChild(entregado);
 
-        const idCompra = document.createElement('p');
-        idCompra.textContent = `ID de compra: ${despacho.id_compra}`;
+        const idCompra = document.createElement('td');
+        idCompra.textContent = despacho.id_compra;
+        row.appendChild(idCompra);
 
-        const direccionCompra = document.createElement('p');
-        direccionCompra.textContent = `Dirección de compra: ${despacho.direccion_compra}`;
+        const direccionCompra = document.createElement('td');
+        direccionCompra.textContent = despacho.direccion_compra;
+        row.appendChild(direccionCompra);
 
-        const valorCompra = document.createElement('p');
-        valorCompra.textContent = `Valor de compra: $${despacho.valor_compra}`;
+        const valorCompra = document.createElement('td');
+        valorCompra.textContent = `$${despacho.valor_compra}`;
+        row.appendChild(valorCompra);
 
-        despachoElement.appendChild(fechaDespacho);
-        despachoElement.appendChild(patenteCamion);
-        despachoElement.appendChild(intento);
-        despachoElement.appendChild(entregado);
-        despachoElement.appendChild(idCompra);
-        despachoElement.appendChild(direccionCompra);
-        despachoElement.appendChild(valorCompra);
-
-        despachoContainer.appendChild(despachoElement);
+        despachoTableBody.appendChild(row);
     });
 }
 
-obtenerDatosDespacho();
