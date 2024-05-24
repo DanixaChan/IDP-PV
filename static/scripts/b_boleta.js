@@ -25,7 +25,7 @@ function createCard(boleta) {
     const card = document.createElement('div');
     card.className = 'card mt-5';
     card.style.width = '18rem';
-    card.style.height = '12rem';
+    card.style.height = '18rem';
 
     const cardBody = document.createElement('div');
     cardBody.className = 'card-body';

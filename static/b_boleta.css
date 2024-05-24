@@ -87,7 +87,7 @@ body::before {
 }
 
 .card {
-    border: 15px double #0dd7b5d4 !important;
+    border: 15px double #09967fd4 !important;
     border-radius: 15px !important;
 }
 
@@ -218,14 +218,14 @@ body::before {
   
 .modal-header .btn-x[data-bs-dismiss="modal"]{
     padding: 1% 3% !important;
-    margin-left: 69% !important;
+    margin-left: 75% !important;
     background-color: #24272c;
     color: white !important;
 }
 
 .modal-header .btn-x[data-bs-dismiss="modal"]:hover{
     padding: 1% 3% !important;
-    margin-left: 69% !important;
+    margin-left: 75% !important;
     background-color: #eb4343b9;
     color: rgb(255, 255, 255) !important;
 }

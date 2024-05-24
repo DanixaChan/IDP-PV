@@ -1,17 +1,22 @@
 // go_despacho.js
+const container = document.getElementById('div-grid-ord');
+const paginationContainer = document.getElementById('pagination');
+const cardsPerPage = 9;
+let currentPage = 1;
+let data = [];
 
-const url = 'http://44.205.221.190:8000/despachos/';
+const url = '/obtener_datos_ec2';
 
 async function obtenerDatosDespacho() {
     try {
         const response = await fetch(url);
-        const data = await response.json();
-        
-        if (Array.isArray(data.results)) {
-            mostrarDespachos(data.results);
-        } else {
-            console.error('Los datos recibidos no son un array:', data);
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos');
         }
+        const result = await response.json();
+        console.log(result); // Agregar esta línea para ver los datos recibidos
+        data = result;
+        showPage(currentPage);
     } catch (error) {
         console.error('Error al obtener los datos:', error);
     }
