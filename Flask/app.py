@@ -1,3 +1,4 @@
+# App.py
 from flask import Flask, render_template, send_from_directory, jsonify, request
 import os
 import requests
@@ -55,7 +56,7 @@ def obtener_ordenes_despacho_externas():
         return response.json()
     else:
         return []
-
+# Almacenar datos de boleta en la EC2
 def almacenar_boletas_en_interna(boletas):
     for boleta in boletas:
         nueva_boleta = Boleta(
@@ -67,6 +68,7 @@ def almacenar_boletas_en_interna(boletas):
         db.session.add(nueva_boleta)
     db.session.commit()
 
+# Almacenar datos de despacho en la EC2 
 def almacenar_ordenes_despacho_en_interna(ordenes):
     for orden in ordenes:
         nuevo_despacho = Despacho(
@@ -117,8 +119,18 @@ def obtener_datos_ec2():
         return jsonify(datos)
     else:
         # Si la solicitud no fue exitosa, mostrar un mensaje de error
-        return f'Error al obtener los datos de la instancia de EC2: {str(e)}', 500
+        return f'Error al obtener los datos de la instancia de EC2: {response.text}', 500
 
+# Nueva ruta para recibir los datos de boleta desde el cliente
+@app.route('/guardar_boleta', methods=['POST'])
+def guardar_boleta():
+    # Obtén los datos de boleta enviados desde el cliente
+    boleta_data = request.json
+    # Aquí puedes realizar acciones como almacenar los datos en la base de datos
+    # Por ahora, simplemente imprimiremos los datos en la consola
+    print('Datos de boleta recibidos:', boleta_data)
+    # Devuelve una respuesta
+    return jsonify({'message': 'Datos de boleta recibidos correctamente'})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
