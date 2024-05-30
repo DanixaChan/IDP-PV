@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Datos JSON</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        #data {
+            white-space: pre-wrap; /* So that long lines of JSON wrap in the viewport */
+        }
+    </style>
+</head>
+<body>
+    <h1>Datos JSON</h1>
+    <button onclick="fetchData()">Cargar Datos</button>
+    <pre id="data">Los datos se mostrarán aquí...</pre>
+
+    <script>
+        function fetchData() {
+            fetch('/todos_los_datos')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('data').textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    document.getElementById('data').textContent = 'Error al obtener los datos: ' + error;
+                });
+        }
+    </script>
+</body>
+</html>

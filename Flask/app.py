@@ -14,7 +14,7 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-@app.route('/ver_datos_json')
+@app.route('/datos_json')
 def ver_datos_json():
     return render_template('datos_json.html')
 
