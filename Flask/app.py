@@ -1,19 +1,24 @@
-# App.py
-from flask import Flask, render_template, send_from_directory, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory, render_template
 import os
 import requests
 from config import Config
 from models import db, Boleta, Despacho
 
+# Configuración de la aplicación Flask
 template_dir = os.path.abspath('../templates')
-
 app = Flask(__name__, template_folder=template_dir, static_folder='../static')
 app.config.from_object(Config)
 db.init_app(app)
 
+# Crear todas las tablas en la base de datos
 with app.app_context():
     db.create_all()
 
+@app.route('/ver_datos_json')
+def ver_datos_json():
+    return render_template('datos_json.html')
+
+# Rutas para servir imágenes
 @app.route('/img/icono_emp.png')
 def img():
     return send_from_directory(app.static_folder, 'icono_emp.png')
@@ -22,6 +27,7 @@ def img():
 def img_prod():
     return send_from_directory(app.static_folder, 'test-img-prod.jpg')
 
+# Rutas para las diferentes páginas
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -42,7 +48,7 @@ def login():
 def register():
     return render_template('register.html')
 
-
+# Funciones para obtener datos desde las APIs
 def obtener_boletas_externas():
     response = requests.get(app.config['API_BOLETAS_URL'])
     if response.status_code == 200:
@@ -51,12 +57,13 @@ def obtener_boletas_externas():
         return []
 
 def obtener_ordenes_despacho_externas():
-    response = requests.get('http://44.205.221.190:8000/despachos/')
+    response = requests.get(app.config['http://44.205.221.190:8000/despachos/'])
     if response.status_code == 200:
         return response.json()
     else:
         return []
-# Almacenar datos de boleta en la EC2
+
+# Funciones para almacenar los datos en la base de datos
 def almacenar_boletas_en_interna(boletas):
     for boleta in boletas:
         nueva_boleta = Boleta(
@@ -68,7 +75,6 @@ def almacenar_boletas_en_interna(boletas):
         db.session.add(nueva_boleta)
     db.session.commit()
 
-# Almacenar datos de despacho en la EC2 
 def almacenar_ordenes_despacho_en_interna(ordenes):
     for orden in ordenes:
         nuevo_despacho = Despacho(
@@ -83,6 +89,7 @@ def almacenar_ordenes_despacho_en_interna(ordenes):
         db.session.add(nuevo_despacho)
     db.session.commit()
 
+# Rutas para sincronizar los datos con la base de datos
 @app.route('/sincronizar_boletas')
 def sincronizar_boletas():
     boletas = obtener_boletas_externas()
@@ -95,6 +102,7 @@ def sincronizar_ordenes_despacho():
     almacenar_ordenes_despacho_en_interna(ordenes)
     return jsonify({'message': 'Órdenes de despacho sincronizadas correctamente'})
 
+# Rutas para mostrar los datos almacenados
 @app.route('/boletas')
 def mostrar_boletas():
     boletas = Boleta.query.all()
@@ -108,29 +116,55 @@ def mostrar_ordenes_despacho():
 # Ruta para obtener los datos desde la instancia de EC2
 @app.route('/obtener_datos_ec2')
 def obtener_datos_ec2():
-    # Hacer una solicitud GET a la instancia de EC2 para obtener los datos
-    response = requests.get('http://44.205.221.190:8000/despachos', timeout=10)
-    
-    # Verificar si la solicitud fue exitosa (código de estado 200)
+    response = requests.get(app.config['http://44.205.221.190:8000/despachos/'], timeout=10)
     if response.status_code == 200:
-        # Obtener los datos del cuerpo de la respuesta JSON
         datos = response.json()
-        # Renderizar la plantilla go_despacho.html con los datos recibidos
         return jsonify(datos)
     else:
-        # Si la solicitud no fue exitosa, mostrar un mensaje de error
         return f'Error al obtener los datos de la instancia de EC2: {response.text}', 500
 
 # Nueva ruta para recibir los datos de boleta desde el cliente
 @app.route('/guardar_boleta', methods=['POST'])
 def guardar_boleta():
-    # Obtén los datos de boleta enviados desde el cliente
     boleta_data = request.json
-    # Aquí puedes realizar acciones como almacenar los datos en la base de datos
-    # Por ahora, simplemente imprimiremos los datos en la consola
-    print('Datos de boleta recibidos:', boleta_data)
-    # Devuelve una respuesta
+    nueva_boleta = Boleta(
+        id=boleta_data['id'],
+        numero=boleta_data['numero'],
+        fecha=boleta_data['fecha'],
+        total=boleta_data['total']
+    )
+    db.session.add(nueva_boleta)
+    db.session.commit()
     return jsonify({'message': 'Datos de boleta recibidos correctamente'})
+
+# Función para obtener y combinar los datos de "enduro" y la API de despacho
+def obtener_y_combinar_datos():
+    # Obtener los datos de "enduro"
+    enduro_data = obtener_boletas_externas()
+    
+    # Obtener los datos de la API de despacho
+    despacho_data = obtener_ordenes_despacho_externas()
+    
+    # Combinar los datos
+    datos_combinados = {'enduro_data': enduro_data, 'despacho_data': despacho_data}
+    
+    return datos_combinados
+
+# Ruta para obtener los datos combinados
+@app.route('/datos_combinados', methods=['GET'])
+def datos_combinados():
+    # Obtener y devolver los datos combinados
+    datos_combinados = obtener_y_combinar_datos()
+    return jsonify(datos_combinados)
+
+# Endpoint para obtener todos los datos en formato JSON
+@app.route('/todos_los_datos', methods=['GET'])
+def todos_los_datos():
+    boletas = Boleta.query.all()
+    despachos = Despacho.query.all()
+    boletas_data = [boleta.to_dict() for boleta in boletas]
+    despachos_data = [despacho.to_dict() for despacho in despachos]
+    return jsonify({'boletas': boletas_data, 'despachos': despachos_data})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
