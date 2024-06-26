@@ -1,0 +1,117 @@
+/* login.css */
+html, body {
+    width: 100%;
+    height: 100vh;
+    --s: 84px;
+    --c1: #393E46;
+    --c2: #cdcbcc;
+    --c3: #999999;
+    
+    --_g: 0 120deg, #0000 0;
+    background: conic-gradient(
+        from 0deg at calc(500% / 6) calc(100% / 3),
+        var(--c3) var(--_g)
+        ),
+        conic-gradient(
+        from -120deg at calc(100% / 6) calc(100% / 3),
+        var(--c2) var(--_g)
+        ),
+        conic-gradient(
+        from 120deg at calc(100% / 3) calc(500% / 6),
+        var(--c1) var(--_g)
+        ),
+        conic-gradient(
+        from 120deg at calc(200% / 3) calc(500% / 6),
+        var(--c1) var(--_g)
+        ),
+        conic-gradient(
+        from -180deg at calc(100% / 3) 50%,
+        var(--c2) 60deg,
+        var(--c1) var(--_g)
+        ),
+        conic-gradient(
+        from 60deg at calc(200% / 3) 50%,
+        var(--c1) 60deg,
+        var(--c3) var(--_g)
+        ),
+        conic-gradient(
+        from -60deg at 50% calc(100% / 3),
+        var(--c1) 120deg,
+        var(--c2) 0 240deg,
+        var(--c3) 0
+        );
+    background-size: calc(var(--s) * 1.732) var(--s);
+    position: relative; /* Necesario para el posicionamiento del pseudo-elemento */
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100% !important;
+    background-color: #393e46da; /* Cambia el último valor para ajustar la opacidad */
+}
+
+@keyframes rotate-vert-center {
+    0% {
+      -webkit-transform: rotateY(0);
+              transform: rotateY(0);
+    }
+    100% {
+      -webkit-transform: rotateY(360deg);
+              transform: rotateY(360deg);
+    }
+  }
+
+#background {
+    background-color: #393E46;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+
+    .card {
+        width: 20rem;
+    }
+
+    h5.card-title{
+        margin-bottom: 20px;
+    }
+
+    .card-body {
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .btn-custom {
+        background-color: #32E0C4; /* Color de fondo */
+        border-color: #32E0C4; /* Color de borde */
+        color: #ffffff; /* Color de texto */
+        padding: 5px 15px;
+        margin-bottom: 15px;
+    }
+
+    .signup-link {
+        text-align: center;
+    }
+    
+    #imgp:hover {
+        animation: rotate-vert-center 0.5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+    }
+}
+
+.complemento {
+    margin-bottom: 60px;
+}
+
+#button{
+    margin-top: 78px;
+}

@@ -1,0 +1,25 @@
+<!-- footer.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>postventa</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='footer.css') }}">
+  </head>
+<body>
+    {% block footer %}
+    <nav class="navbar navbar-expand-xl d-flex justify-content-between mt-5 footer">
+        <div class="container-fluid col d-flex m-1 flex-column">
+          <a class="navbar-brand foot-brand me-auto">Toda ayuda es bienvenida</a>
+          <h5 class="sub-brand me-auto">No dudes en contactarnos! 🐧🤍</h5>
+        </div>          
+        <div id="contact-area" class="col d-flex flex-column flex-row-reverse">
+            <h5 id="whatsapp-text" class="contact-e"><i class="lab la-whatsapp"></i>Whatsapp: <br>+56 9 XXX XXX XX</h5>
+            <h5 class="contact-e"><i class="lab la-instagram"></i>Instagram: <br>@postventa</h5>
+        </div>
+      </nav>
+    {% endblock %}
+</body>
+</html>

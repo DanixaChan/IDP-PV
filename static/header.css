@@ -1,0 +1,86 @@
+/* header.css */
+.navbar{
+    display: flex;
+    width: 100% !important;
+    background-color: #222831;
+    position: sticky !important;
+    top: 0;
+    z-index: 100;
+}
+
+#logo{
+    margin-right: 1%;
+}
+
+nav div ul .nav-item .nav-lk, .navbar-brand, #slash_logreg{
+    color: #EEEEEE !important;  
+}
+
+#slash_logreg{
+    margin-top: 1.3%;
+    margin-left: 2%;
+}
+
+nav div ul .nav-item .nav-lk{
+    font-size: 20px;
+    margin-left: 5%;  
+}
+nav div .show  ul .nav-item, nav div .show  ul .session, nav div .show ul .nav-item #login_link{
+    display: flex;
+    justify-content: center;
+    position: relative;
+    left: 0%;
+}
+
+nav div ul .session{
+    position: relative;
+    top: 0;
+    left: 90vh;
+}
+
+.show ul #slash_logreg{
+    display: none;
+}
+
+.navbar-brand{
+    font-size: 30px !important;
+}
+
+.dropdown-menu{
+    width: 130%;
+    background-color: #222831 !important;
+}
+nav div .show ul .dropdown-menu{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+}
+
+nav div .show ul .dropdown-menu .dropitem:hover{
+    width: auto;
+    background-color: #393E46 !important;
+}
+
+.dropitem:hover{
+    width: 90%;
+    background-color: #393E46 !important;
+}
+
+#login_link{
+    width: 250% !important;
+    position: relative;
+    right: 75%;
+}
+
+nav div .show  ul .nav-item #login_link{
+    width: 50% !important;
+    position: relative;
+    left: 15.5%;
+}
+
+nav div .show ul .nav-item .nav-lk{
+    position: relative;
+    right: 3.5%;
+}

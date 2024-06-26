@@ -1,3 +1,166 @@
-h1{
-    color: peru;
+/* index.css */
+@keyframes flip-yr {
+    0% {
+        transform: rotateY(0);
+    }
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+@keyframes flip-yr2{
+    0% {
+        transform: rotateY(0);
+        opacity: 1;
+        z-index: 1;
+    }
+    50% {
+        transform: rotateY(60);
+        opacity: 0.5;
+    }
+    100% {
+        transform: rotateY(190deg);
+        opacity: 0;
+        z-index: -1;
+    }
+}
+html, body {
+    width: 100%;
+    height: 100vh;
+    --s: 84px;
+    --c1: #393E46;
+    --c2: #cdcbcc;
+    --c3: #999999;
+    
+    --_g: 0 120deg, #0000 0;
+    background: conic-gradient(
+        from 0deg at calc(500% / 6) calc(100% / 3),
+        var(--c3) var(--_g)
+        ),
+        conic-gradient(
+        from -120deg at calc(100% / 6) calc(100% / 3),
+        var(--c2) var(--_g)
+        ),
+        conic-gradient(
+        from 120deg at calc(100% / 3) calc(500% / 6),
+        var(--c1) var(--_g)
+        ),
+        conic-gradient(
+        from 120deg at calc(200% / 3) calc(500% / 6),
+        var(--c1) var(--_g)
+        ),
+        conic-gradient(
+        from -180deg at calc(100% / 3) 50%,
+        var(--c2) 60deg,
+        var(--c1) var(--_g)
+        ),
+        conic-gradient(
+        from 60deg at calc(200% / 3) 50%,
+        var(--c1) 60deg,
+        var(--c3) var(--_g)
+        ),
+        conic-gradient(
+        from -60deg at 50% calc(100% / 3),
+        var(--c1) 120deg,
+        var(--c2) 0 240deg,
+        var(--c3) 0
+        );
+    background-size: calc(var(--s) * 1.732) var(--s);
+    position: relative; /* Necesario para el posicionamiento del pseudo-elemento */
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100% !important;
+    background-color: #393e46da; /* Cambia el último valor para ajustar la opacidad */
+}
+
+.cont-div{
+    position: relative;
+    top: 0;
+    z-index: 2 !important;
+}
+
+.subtitle{
+    color: #EEEEEE;
+    background-color: #222831;
+    padding: 1% 0 1% 3%;
+    margin: 1% -2% 0 3% !important;
+    border-radius: 0px 0px 0px 40px;
+}
+
+.cards-area{
+    justify-content: center;
+}
+
+.card {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 34px;
+    grid-row-gap: 0px;
+    justify-content: center;
+    margin: 40px 10px 0 10px !important;
+}
+
+.i-card{
+    font-size: 120px;
+    margin: 5% 0%;
+}
+
+.show-behind-card .card-body .btn-accesslink, .behind-card .card-body .card-title{
+    margin-top: 45%;
+}
+
+.front-card *{
+    user-select: none;
+}
+
+.flip-ani2{ 
+    animation: flip-yr2 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+    animation-fill-mode: forwards;
+}
+
+.flip-ani{ 
+    animation: flip-yr 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+    animation-fill-mode: forwards;
+}
+
+.front-card{
+    position: absolute;
+    right: 6%;
+}
+
+.show-front-card {
+    transform-style: preserve-3d;
+}
+
+.behind-card {
+    pointer-events: none !important;
+}
+
+.show-behind-card {
+    pointer-events: all !important;
+
+}
+
+.behind-card, .show-behind-card{
+    position: relative !important;
+    right: -14.3% !important;
+    display: flex !important;
+    align-items: center !important;
+    align-content: center !important;
+    justify-content: center !important;
+    background-color: #222831 !important;
+    color: #EEEEEE !important;
+    font-size: 200% !important;
+    z-index: 0;
+}
+
+.btn-accesslink {
+    width: 100%;
+    pointer-events: auto; /* Permitir interacción con el botón */
 }

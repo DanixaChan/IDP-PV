@@ -1,0 +1,47 @@
+/* footer.css */
+.footer{
+    display: flex;
+    width: 100% !important;
+    background-color: #222831;
+    position: sticky;
+    left: 0;
+    bottom: 0%;
+    z-index: 100;
+}
+
+
+.foot-brand, .sub-brand{
+    color: #EEEEEE;
+    margin-left: 2%;
+}
+
+.navbar-brand{
+    font-size: 25px !important;
+}
+
+.sub-brand{
+    font-size: 20px;
+}
+
+#contact-area{
+    position: relative;
+    top: 0;
+    margin: 0;
+    padding: 0;
+}
+
+h5{
+    font-size: 100%;
+    color: #EEEEEE;
+}
+
+.contact-e{
+    width: 25%;
+    padding: 0;
+    margin: 0;
+}
+
+#whatsapp-text{
+    position: relative;
+    right: 5%;
+}

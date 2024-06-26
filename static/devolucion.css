@@ -1,0 +1,88 @@
+@keyframes shadow-pop-bl {
+    0% {
+        box-shadow: 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e;
+        transform: translateX(0) translateY(0);
+    }
+
+    100% {
+        box-shadow: -1px 1px #3e3e3e, -2px 2px #3e3e3e, -3px 3px #3e3e3e, -4px 4px #3e3e3e;
+        transform: translateX(4px) translateY(-4px);
+    }
+}
+
+html,
+body {
+    width: 100%;
+    height: 66vh;
+    --s: 84px;
+    --c1: #393E46;
+    --c2: #cdcbcc;
+    --c3: #999999;
+
+    --_g: 0 120deg, #0000 0;
+    background: conic-gradient(from 0deg at calc(500% / 6) calc(100% / 3),
+            var(--c3) var(--_g)),
+        conic-gradient(from -120deg at calc(100% / 6) calc(100% / 3),
+            var(--c2) var(--_g)),
+        conic-gradient(from 120deg at calc(100% / 3) calc(500% / 6),
+            var(--c1) var(--_g)),
+        conic-gradient(from 120deg at calc(200% / 3) calc(500% / 6),
+            var(--c1) var(--_g)),
+        conic-gradient(from -180deg at calc(100% / 3) 50%,
+            var(--c2) 60deg,
+            var(--c1) var(--_g)),
+        conic-gradient(from 60deg at calc(200% / 3) 50%,
+            var(--c1) 60deg,
+            var(--c3) var(--_g)),
+        conic-gradient(from -60deg at 50% calc(100% / 3),
+            var(--c1) 120deg,
+            var(--c2) 0 240deg,
+            var(--c3) 0);
+    background-size: calc(var(--s) * 1.732) var(--s);
+    position: relative;
+    /* Necesario para el posicionamiento del pseudo-elemento */
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100% !important;
+    background-color: #393e46da;
+}
+
+.card {
+    border: 15px double #09967fd4 !important;
+    border-radius: 15px !important;
+}
+
+
+.btn-option{
+    background-color: #c0c0c0 !important;
+    color: #393e46 !important;
+    border: 5px double #c0c0c0 !important;
+}
+
+.btn-option:hover{
+    animation: shadow-pop-bl 0.3s cubic-bezier(0.470, 0.000, 0.745, 0.715) both;
+    font-weight: 400;
+    background-color: #393e46 !important;
+    color: #EEEEEE !important;
+    border: 5px double #32e0c39d !important;
+}
+
+#btn-container{
+    background-color: #ffffff;
+    border:15px solid #ffffff !important;
+    position: relative;
+    top: 5%;
+}
+
+#text-container{
+    background-color: #ffffff;
+    border:15px solid #ffffff !important;
+    position: relative;
+    top: 5%;
+}
