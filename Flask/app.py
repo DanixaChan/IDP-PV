@@ -27,7 +27,7 @@ def obtener_boletas_externas():
       200:
         description: Datos de las boletas obtenidos correctamente
     """
-    response = requests.get(app.config['API_BOLETAS_URL'])
+    response = requests.get(app.config['http://54.159.228.5:8000/boletasVentasPosVentas/'])
     if response.status_code == 200:
         return response.json()
     else:
@@ -41,7 +41,7 @@ def obtener_ordenes_despacho_externas():
       200:
         description: Datos de las órdenes de despacho obtenidos correctamente
     """
-    response = requests.get(app.config['API_DESPACHOS_URL'])
+    response = requests.get(app.config['http://44.205.221.190:8000/despachos/'])
     if response.status_code == 200:
         return response.json()
     else:
@@ -157,9 +157,13 @@ def sincronizar_boletas():
       200:
         description: Sincroniza las boletas con la base de datos
     """
-    boletas = obtener_boletas_externas()
-    almacenar_boletas_en_interna(boletas)
-    return jsonify({'message': 'Boletas sincronizadas correctamente'})
+    try:
+        boletas = obtener_boletas_externas()
+        almacenar_boletas_en_interna(boletas)
+        return jsonify({'message': 'Boletas sincronizadas correctamente'})
+    except Exception as e:
+        app.logger.error(f"Error en sincronización de boletas: {e}")
+        return jsonify({'error': 'Error en sincronización de boletas'}), 500
 
 @app.route('/sincronizar_ordenes_despacho', methods=['GET'])
 def sincronizar_ordenes_despacho():
@@ -170,9 +174,13 @@ def sincronizar_ordenes_despacho():
       200:
         description: Sincroniza las órdenes de despacho con la base de datos
     """
-    ordenes = obtener_ordenes_despacho_externas()
-    almacenar_ordenes_despacho_en_interna(ordenes)
-    return jsonify({'message': 'Órdenes de despacho sincronizadas correctamente'})
+    try:
+        ordenes = obtener_ordenes_despacho_externas()
+        almacenar_ordenes_despacho_en_interna(ordenes)
+        return jsonify({'message': 'Órdenes de despacho sincronizadas correctamente'})
+    except Exception as e:
+        app.logger.error(f"Error en sincronización de órdenes de despacho: {e}")
+        return jsonify({'error': 'Error en sincronización de órdenes de despacho'}), 500
 
 @app.route('/obtener_datos_ec2_boletas', methods=['GET'])
 def obtener_datos_ec2_boletas():
