@@ -194,7 +194,7 @@ def obtener_datos_ec2_boletas():
         description: Error al obtener los datos de las boletas
     """
     try:
-        response = requests.get(app.config['API_BOLETAS_URL'])
+        response = requests.get(app.config['http://54.159.228.5:8000/boletasVentasPosVentas/'])
         response.raise_for_status()  # Lanza una excepción si la solicitud no fue exitosa
 
         boletas_data = response.json()
