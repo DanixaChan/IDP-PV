@@ -10,7 +10,7 @@ const cardsPerPage = 12;
 let currentPage = 1;
 
 // Datos de ejemplo
-const data = [
+let data = [
     { id: 1, nombre_comprador: "Juan Pérez", rut_comprador: "12345678-9", fecha: '2024-05-18' },
     { id: 2, nombre_comprador: "Ana Gómez", rut_comprador: "98765432-1", fecha: '2024-05-18' },
     { id: 3, nombre_comprador: "Luis Martínez", rut_comprador: "12345987-0", fecha: '2024-05-18' },
@@ -19,6 +19,23 @@ const data = [
     { id: 6, nombre_comprador: "Pedro García", rut_comprador: "45678901-3", fecha: '2024-05-18' },
     // Agrega más datos según sea necesario
 ];
+
+// const url = '/obtener_datos_ec2_boletas';
+
+// async function obtenerDatosDespacho() {
+//     try {
+//         const response = await fetch(url);
+//         if (!response.ok) {
+//             throw new Error('Error al obtener los datos');
+//         }
+//         const result = await response.json();
+//         console.log(result); // Agregar esta línea para ver los datos recibidos
+//         data = result;
+//         showPage(currentPage);
+//     } catch (error) {
+//         console.error('Error al obtener los datos:', error);
+//     }
+// }
 
 // Función para crear una tarjeta
 function createCard(boleta) {

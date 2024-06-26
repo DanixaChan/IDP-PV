@@ -22,43 +22,107 @@ async function obtenerDatosDespacho() {
     }
 }
 
-function mostrarDespachos(despachos) {
-    const despachoTableBody = document.getElementById('despachoTableBody');
+function createCard(despacho) {
+    const card = document.createElement('div');
+    card.className = 'card mt-2 col-md-3';
+    card.style.width = '18rem';
 
-    despachoTableBody.innerHTML = '';
+    const cardBody = document.createElement('div');
+    cardBody.className = 'card-body';
 
-    despachos.forEach(despacho => {
-        const row = document.createElement('tr');
+    const cardTitle = document.createElement('h5');
+    cardTitle.className = 'card-title';
+    cardTitle.textContent = `ID Compra: ${despacho.id_compra}`;
 
-        const fechaDespacho = document.createElement('td');
-        fechaDespacho.textContent = despacho.fecha_despacho;
-        row.appendChild(fechaDespacho);
+    const cardTextFecha = document.createElement('p');
+    cardTextFecha.className = 'card-text';
+    cardTextFecha.textContent = `Fecha: ${despacho.fecha_despacho}`;
 
-        const patenteCamion = document.createElement('td');
-        patenteCamion.textContent = despacho.patente_camion;
-        row.appendChild(patenteCamion);
+    const cardTextPatente = document.createElement('p');
+    cardTextPatente.className = 'card-text';
+    cardTextPatente.textContent = `Patente: ${despacho.patente_camion}`;
 
-        const intento = document.createElement('td');
-        intento.textContent = despacho.intento;
-        row.appendChild(intento);
+    const cardTextIntento = document.createElement('p');
+    cardTextIntento.className = 'card-text';
+    cardTextIntento.textContent = `Intento: ${despacho.intento}`;
 
-        const entregado = document.createElement('td');
-        entregado.textContent = despacho.entregado ? 'Sí' : 'No';
-        row.appendChild(entregado);
+    const cardTextEntregado = document.createElement('p');
+    cardTextEntregado.className = 'card-text';
+    cardTextEntregado.textContent = `Entregado: ${despacho.entregado ? 'Sí' : 'No'}`;
 
-        const idCompra = document.createElement('td');
-        idCompra.textContent = despacho.id_compra;
-        row.appendChild(idCompra);
+    const cardTextDireccion = document.createElement('p');
+    cardTextDireccion.className = 'card-text';
+    cardTextDireccion.textContent = `Dirección: ${despacho.direccion_compra}`;
 
-        const direccionCompra = document.createElement('td');
-        direccionCompra.textContent = despacho.direccion_compra;
-        row.appendChild(direccionCompra);
+    const cardTextValor = document.createElement('p');
+    cardTextValor.className = 'card-text';
+    cardTextValor.textContent = `Valor: $${despacho.valor_compra}`;
 
-        const valorCompra = document.createElement('td');
-        valorCompra.textContent = `$${despacho.valor_compra}`;
-        row.appendChild(valorCompra);
+    cardBody.appendChild(cardTitle);
+    cardBody.appendChild(cardTextFecha);
+    cardBody.appendChild(cardTextPatente);
+    cardBody.appendChild(cardTextIntento);
+    cardBody.appendChild(cardTextEntregado);
+    cardBody.appendChild(cardTextDireccion);
+    cardBody.appendChild(cardTextValor);
+    card.appendChild(cardBody);
 
-        despachoTableBody.appendChild(row);
-    });
+    container.appendChild(card);
 }
 
+// Función para mostrar una página específica
+function showPage(page) {
+    container.innerHTML = '';
+    const start = (page - 1) * cardsPerPage;
+    const end = start + cardsPerPage;
+    
+    // Verificar si data.results es una matriz
+    if (Array.isArray(data.results)) {
+        const pageData = data.results.slice(start, end);
+        pageData.forEach(item => createCard(item));
+        updatePagination(page);
+    } else {
+        console.error('Los datos recibidos no tienen el formato esperado:', data);
+    }
+}
+
+// Función para actualizar los botones de paginación
+function updatePagination(page) {
+    paginationContainer.innerHTML = '';
+    const totalPages = Math.ceil(data.length / cardsPerPage);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button');
+        button.className = 'btn btn-secondary mx-1';
+        button.textContent = i;
+        if (i === page) {
+            button.classList.add('active');
+        }
+        button.addEventListener('click', () => {
+            currentPage = i;
+            showPage(i);
+        });
+        paginationContainer.appendChild(button);
+    }
+}
+
+// Inicializar la primera página
+obtenerDatosDespacho();
+
+function goToPreviousPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        showPage(currentPage);
+    }
+}
+
+function goToNextPage() {
+    const totalPages = Math.ceil(data.length / cardsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        showPage(currentPage);
+    }
+}
+
+document.getElementById('previousPageBtn').addEventListener('click', goToPreviousPage);
+document.getElementById('nextPageBtn').addEventListener('click', goToNextPage);

@@ -1,3 +1,5 @@
+// register.js
+
 document.getElementById("register-button").addEventListener("click", function() {
     console.log("Se hizo clic en el botón de registro.");
     var email = document.getElementById("InputEmail1").value;
