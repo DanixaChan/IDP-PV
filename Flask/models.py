@@ -7,7 +7,7 @@ class Boleta(db.Model):
     numero_boleta = db.Column(db.String(50), unique=True, nullable=False)
     fecha_emision = db.Column(db.Date, nullable=False)
     cliente = db.Column(db.String(100), nullable=False)
-    items_boleta = db.Column(db.String(1), nullable=False)
+    items_boleta = db.Column(db.String(255), nullable=False)  # Ajusta la longitud según tus necesidades
     total = db.Column(db.Float, nullable=False)
     estado = db.Column(db.String(50), nullable=False)
 
@@ -15,7 +15,7 @@ class Boleta(db.Model):
         return {
             'id': self.id,
             'numero_boleta': self.numero_boleta,
-            'fecha_emision': self.fecha_emision,
+            'fecha_emision': self.fecha_emision.isoformat(),  # Formato ISO para fecha
             'cliente': self.cliente,
             'items_boleta': self.items_boleta,
             'total': self.total,
@@ -35,7 +35,7 @@ class Despacho(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'fecha_despacho': self.fecha_despacho,
+            'fecha_despacho': self.fecha_despacho.isoformat(),  # Formato ISO para fecha
             'patente_camion': self.patente_camion,
             'intento': self.intento,
             'entregado': self.entregado,
