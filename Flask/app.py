@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request, send_from_directory, render_template
+from flask_sqlalchemy import SQLAlchemy
 import os
 import requests
 from config import Config
@@ -8,82 +9,36 @@ from flasgger import Swagger
 # Configuración de la aplicación Flask
 template_dir = os.path.abspath('../templates')
 app = Flask(__name__, template_folder=template_dir, static_folder='../static')
-template_dir = "templates"
 app.config.from_object(Config)
-db.init_app(app)
-swagger = Swagger(app)
+db.init_app(app)  # Inicialización de SQLAlchemy
+swagger = Swagger(app)  # Inicialización de Swagger para documentación
 
-# Crear todas las tablas en la base de datos
+# Crear todas las tablas en la base de datos (solo en desarrollo)
 with app.app_context():
     db.create_all()
 
-@app.route('/datos_json')
-def ver_datos_json():
-    """
-    Renderiza una plantilla HTML con datos JSON
-    ---
-    responses:
-     200:
-            description: Plantilla HTML con datos JSON
-    """
-    return render_template('datos_json.html')
-
-# Rutas para servir imágenes
-@app.route('/img/icono_emp.png')
-def img():
-    return send_from_directory(app.static_folder, 'icono_emp.png')
-
-@app.route('/img/test-img-prod.jpg')
-def img_prod():
-    return send_from_directory(app.static_folder, 'test-img-prod.jpg')
-
-# Rutas para las diferentes páginas
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/b_boleta')
-def gboleta():
-    return render_template('b_boleta.html')
-
-@app.route('/go_despacho')
-def godespacho():
-    return render_template('go_despacho.html')
-
-@app.route('/login')
-def login():
-    return render_template('login.html')
-
-@app.route('/register')
-def register():
-    return render_template('register.html')
-
-@app.route('/devolucion')
-def devolucion():
-    return render_template('devolucion.html')
-
-# Funciones para obtener datos desde las APIs
+# Funciones para obtener datos desde las APIs externas
 def obtener_boletas_externas():
     """
-    Obtiene los datos de las boletas de origen externo
+    Obtiene los datos de las boletas desde la API externa
     ---
     responses:
      200:
-            description: Se obtiene las boletas a partir de otro endpoint
+            description: Datos de las boletas obtenidos correctamente
     """
     response = requests.get(app.config['http://54.159.228.5:8000/boletasVentasPosVentas/'])
     if response.status_code == 200:
         return response.json()
     else:
-        return jsonify({'error': 'No se pudo obtener la información de la API externa'}), response.status_code
+        return []
 
 def obtener_ordenes_despacho_externas():
     """
-    Obtiene los datos de las ordenes de despacho de origen externo
+    Obtiene los datos de las órdenes de despacho desde la API externa
     ---
     responses:
      200:
-            description: Se obtiene las ordenes de despacho a partir de otro endpoint
+            description: Datos de las órdenes de despacho obtenidos correctamente
     """
     response = requests.get(app.config['http://44.205.221.190:8000/despachos/'])
     if response.status_code == 200:
@@ -91,14 +46,14 @@ def obtener_ordenes_despacho_externas():
     else:
         return []
 
-# Funciones para almacenar los datos en la base de datos
+# Funciones para almacenar datos en la base de datos
 def almacenar_boletas_en_interna(boletas):
     """
-    Almacena las boletas en BD
+    Almacena los datos de las boletas en la base de datos interna
     ---
     responses:
      200:
-            description: Se almacena las boletas obtenidas hacia la BD
+            description: Boletas almacenadas correctamente en la base de datos
     """
     for boleta in boletas:
         nueva_boleta = Boleta(
@@ -114,11 +69,11 @@ def almacenar_boletas_en_interna(boletas):
 
 def almacenar_ordenes_despacho_en_interna(ordenes):
     """
-    Almacena las ordenes de despacho en BD
+    Almacena los datos de las órdenes de despacho en la base de datos interna
     ---
     responses:
      200:
-            description: Se almacena las boletas obtenidas hacia la BD
+            description: Órdenes de despacho almacenadas correctamente en la base de datos
     """
     for orden in ordenes:
         nuevo_despacho = Despacho(
@@ -133,176 +88,91 @@ def almacenar_ordenes_despacho_en_interna(ordenes):
         db.session.add(nuevo_despacho)
     db.session.commit()
 
-# Rutas para sincronizar los datos con la base de datos
-@app.route('/sincronizar_boletas')
-def sincronizar_boletas():
+# Rutas de la aplicación
+
+@app.route('/')
+def index():
     """
-    Sincronizacion de boletas a BD
+    Ruta principal de la aplicación
     ---
     responses:
      200:
-            description: Sincroniza las boletas con la BD
+            description: Página principal de la aplicación
     """
-    boletas = obtener_boletas_externas()
-    almacenar_boletas_en_interna(boletas)
-    return jsonify({'message': 'Boletas sincronizadas correctamente'})
+    return render_template('index.html')
 
-@app.route('/sincronizar_ordenes_despacho')
-def sincronizar_ordenes_despacho():
-    """
-    Sincronizacion de ordenes de despacho a BD
-    ---
-    responses:
-     200:
-            description: Sincroniza las ordenes de despacho con la BD
-    """
-    ordenes = obtener_ordenes_despacho_externas()
-    almacenar_ordenes_despacho_en_interna(ordenes)
-    return jsonify({'message': 'Órdenes de despacho sincronizadas correctamente'})
-
-# Rutas para mostrar los datos almacenados
-@app.route('/boletas')
+@app.route('/boletas', methods=['GET'])
 def mostrar_boletas():
     """
-    Visualiza los datos de las boletas almacenadas
+    Muestra todas las boletas almacenadas en la base de datos
     ---
     responses:
      200:
-            description: Permite mostrar los datos de las boletas almacenadas
+            description: Muestra las boletas almacenadas
     """
     boletas = Boleta.query.all()
-    return render_template('boletas.html', boletas=boletas)
+    return jsonify([boleta.to_dict() for boleta in boletas])
 
-@app.route('/ordenes_despacho')
+@app.route('/ordenes_despacho', methods=['GET'])
 def mostrar_ordenes_despacho():
     """
-     Visualiza los datos de las ordenes de despacho almacenadas
+    Muestra todas las órdenes de despacho almacenadas en la base de datos
     ---
     responses:
      200:
-            description: Permite mostrar los datos de las ordenes de despacho almace>
+            description: Muestra las órdenes de despacho almacenadas
     """
     ordenes = Despacho.query.all()
-    return render_template('ordenes_despacho.html', ordenes=ordenes)
+    return jsonify([orden.to_dict() for orden in ordenes])
 
-# Ruta para obtener los datos desde la instancia de EC2
-@app.route('/obtener_datos_ec2')
-def obtener_datos_ec2():
-    """
-     Visualiza los datos que se reciben desde el endpoint de despacho
-    ---
-    responses:
-     200:
-            description: Permite mostrar los datos de las ordenes de despacho encont>
-    """
-    response = requests.get(app.config['http://44.205.221.190:8000/despachos/'], timeout=10)
-    if response.status_code == 200:
-        datos = response.json()
-        return jsonify(datos)
-    else:
-        return f'Error al obtener los datos de la instancia de EC2: {response.text}', 500
-
-# Ruta para obtener los datos desde la instancia de EC2 de Contabilidad
-@app.route('/obtener_datos_ec2_boletas')
-def obtener_datos_ec2_boletas():
-    """
-     Visualiza los datos que se reciben desde el endpoint de Contabilidad
-    ---
-    responses:
-     200:
-            description: Permite mostrar los datos de las boletas generadas en contabilidad encont>
-    """
-    response = requests.get(app.config['http://54.159.228.5:8000/boletasVentasPosVentas/'], timeout=10)
-    if response.status_code == 200:
-        datos = response.json()
-        return jsonify(datos)
-    else:
-        return f'Error al obtener los datos de la instancia de EC2 de boletas: {response.text}', 500
-
-# Nueva ruta para recibir los datos de boleta desde el cliente
 @app.route('/guardar_boleta', methods=['POST'])
 def guardar_boleta():
     """
-     Ruta para guardar datos de las boletas desde el cliente
+    Guarda una nueva boleta en la base de datos desde el cliente
     ---
     responses:
      200:
-            description: Permite acceder a la recepción de datos de boleta desde cli>
+            description: Guarda una nueva boleta en la base de datos
     """
     boleta_data = request.json
     nueva_boleta = Boleta(
-        numero_boleta=boleta_data['Numero_boleta'],
+        numero_boleta=boleta_data['numero_boleta'],
         fecha_emision=boleta_data['fecha_emision'],
         cliente=boleta_data['cliente'],
-        items_boleta=boleta_data['Items_boleta'],
-        total=boleta_data['Total'],
-        estado=boleta_data['Estado']
+        items_boleta=boleta_data['items_boleta'],
+        total=boleta_data['total'],
+        estado=boleta_data['estado']
     )
     db.session.add(nueva_boleta)
     db.session.commit()
     return jsonify({'message': 'Datos de boleta recibidos correctamente'})
 
-# Función para obtener y combinar los datos de "enduro" y la API de despacho
-def obtener_y_combinar_datos():
+@app.route('/sincronizar_boletas', methods=['GET'])
+def sincronizar_boletas():
     """
-     Obtiene y combina los datos de las boletas con las ordenes de despacho
+    Sincroniza las boletas desde la API externa a la base de datos
     ---
     responses:
      200:
-            description: Primero obtiene los datos de las boletas y ordenes de despa>
+            description: Sincroniza las boletas con la base de datos
     """
-    # Obtener los datos de "enduro"
-    boleta_data = obtener_boletas_externas()
-    
-    # Obtener los datos de la API de despacho
-    despacho_data = obtener_ordenes_despacho_externas()
-    
-    # Combinar los datos
-    datos_combinados = {'boleta_data': boleta_data, 'despacho_data': despacho_data}
-    
-    return datos_combinados
-
-# Ruta para obtener los datos combinados
-@app.route('/datos_combinados', methods=['GET'])
-def datos_combinados():
-    """
-     Obtiene datos combinados
-    ---
-    responses:
-     200:
-            description: Recibe los datos combinados a partir de la función 'obtener>
-    """
-    # Obtener y devolver los datos combinados
-    datos_combinados = obtener_y_combinar_datos()
-    return jsonify(datos_combinados)
-
-# Endpoint para obtener todos los datos en formato JSON
-@app.route('/todos_los_datos', methods=['GET'])
-def todos_los_datos():
-    """
-     Endpoint con todos los datos
-    ---
-    responses:
-     200:
-            description: Endpoint que contiene todos los datos en formato JSON
-    """
-    boletas = Boleta.query.all()
-    despachos = Despacho.query.all()
-    boletas_data = [boleta.to_dict() for boleta in boletas]
-    despachos_data = [despacho.to_dict() for despacho in despachos]
-    return jsonify({'boletas': boletas_data, 'despachos': despachos_data})
-
-@app.route('/devolucion/<int:boleta_id>')
-def devolucion_boleta_id(boleta_id):
     boletas = obtener_boletas_externas()
-    if boletas is None:
-        return "Error al obtener las boletas de la API externa", 500
-    
-    boleta = next((b for b in boletas if b['id'] == boleta_id), None)
-    if boleta:
-        return render_template('devolucion.html', boleta=boleta)
-    else:
-        return "Boleta no encontrada", 404
+    almacenar_boletas_en_interna(boletas)
+    return jsonify({'message': 'Boletas sincronizadas correctamente'})
+
+@app.route('/sincronizar_ordenes_despacho', methods=['GET'])
+def sincronizar_ordenes_despacho():
+    """
+    Sincroniza las órdenes de despacho desde la API externa a la base de datos
+    ---
+    responses:
+     200:
+            description: Sincroniza las órdenes de despacho con la base de datos
+    """
+    ordenes = obtener_ordenes_despacho_externas()
+    almacenar_ordenes_despacho_en_interna(ordenes)
+    return jsonify({'message': 'Órdenes de despacho sincronizadas correctamente'})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(debug=True)
+
