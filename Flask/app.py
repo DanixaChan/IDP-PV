@@ -1,3 +1,5 @@
+#Hola esto funciona 
+
 from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 import os
@@ -6,7 +8,6 @@ from config import Config
 from models import db, Boleta, Despacho
 from flasgger import Swagger
 from datetime import datetime
-
 # Configuración de la aplicación Flask
 template_dir = os.path.abspath('../templates')
 app = Flask(__name__, template_folder=template_dir, static_folder='../static')
