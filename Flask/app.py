@@ -135,18 +135,22 @@ def guardar_boleta():
       200:
         description: Guarda una nueva boleta en la base de datos
     """
-    boleta_data = request.json
-    nueva_boleta = Boleta(
-        numero_boleta=boleta_data['numero_boleta'],
-        fecha_emision=datetime.strptime(boleta_data['fecha_emision'], '%Y-%m-%d').date(),
-        cliente=boleta_data['cliente'],
-        items_boleta=boleta_data['items_boleta'],
-        total=boleta_data['total'],
-        estado=boleta_data['estado']
-    )
-    db.session.add(nueva_boleta)
-    db.session.commit()
-    return jsonify({'message': 'Datos de boleta recibidos correctamente'})
+    try:
+        boleta_data = request.json
+        nueva_boleta = Boleta(
+            numero_boleta=boleta_data['numero_boleta'],
+            fecha_emision=datetime.strptime(boleta_data['fecha_emision'], '%Y-%m-%d').date(),
+            cliente=boleta_data['cliente'],
+            items_boleta=boleta_data['items_boleta'],
+            total=boleta_data['total'],
+            estado=boleta_data['estado']
+        )
+        db.session.add(nueva_boleta)
+        db.session.commit()
+        return jsonify({'message': 'Datos de boleta recibidos correctamente'}), 200
+    except Exception as e:
+        app.logger.error(f"Error al guardar boleta: {e}")
+        return jsonify({'error': 'Error al guardar boleta'}), 500
 
 @app.route('/sincronizar_boletas', methods=['GET'])
 def sincronizar_boletas():
@@ -160,7 +164,7 @@ def sincronizar_boletas():
     try:
         boletas = obtener_boletas_externas()
         almacenar_boletas_en_interna(boletas)
-        return jsonify({'message': 'Boletas sincronizadas correctamente'})
+        return jsonify({'message': 'Boletas sincronizadas correctamente'}), 200
     except Exception as e:
         app.logger.error(f"Error en sincronización de boletas: {e}")
         return jsonify({'error': 'Error en sincronización de boletas'}), 500
@@ -177,7 +181,7 @@ def sincronizar_ordenes_despacho():
     try:
         ordenes = obtener_ordenes_despacho_externas()
         almacenar_ordenes_despacho_en_interna(ordenes)
-        return jsonify({'message': 'Órdenes de despacho sincronizadas correctamente'})
+        return jsonify({'message': 'Órdenes de despacho sincronizadas correctamente'}), 200
     except Exception as e:
         app.logger.error(f"Error en sincronización de órdenes de despacho: {e}")
         return jsonify({'error': 'Error en sincronización de órdenes de despacho'}), 500
@@ -225,3 +229,4 @@ def obtener_datos_ec2_boletas():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
