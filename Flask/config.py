@@ -9,6 +9,6 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # URL del endpoint de AWS EC2 para obtener los datos de despacho
-    API_DESPACHOS_URL = 'http://44.205.221.190:8000/despachos/'
+    API_DESPACHOS_URL = 'http://3.221.189.4:8000/despachos/'
     # URL de la API externa para obtener los datos de las boletas
     API_BOLETAS_URL = 'http://54.159.228.5:8000/boletasVentasPosVentas/'
