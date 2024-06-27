@@ -59,7 +59,7 @@ def obtener_ordenes_despacho_externas():
     Obtiene los datos de las órdenes de despacho desde la API externa
     """
     try:
-        response = requests.get('http://44.205.221.190:8000/despachos/')
+        response = requests.get('http://3.221.189.4:8000/despachos/')
         response.raise_for_status()  # Lanza una excepción si la solicitud no fue exitosa
 
         return response.json()
