@@ -303,17 +303,19 @@ def obtener_boleta_por_numero(numero_boleta):
     # return None
     boletas = obtener_boletas_externas()
     for boleta in boletas:
-        if boleta['numero_boleta'] == numero_boleta:
-            app.logger.info("boleta: {boleta}")
+        print(boleta)
+        if boleta['Numero_boleta'] == numero_boleta:
+            app.logger.info(f"boleta: {numero_boleta}")
+            print("ENCONTRADO")
             return boleta
     return None
 
-@app.route("/devolucion/<numero_boleta>")
+@app.route("/devolucion/<string:numero_boleta>")
 def devolucion_boleta_id(numero_boleta):
     try:
         app.logger.info(f"Recibido numero_boleta: {numero_boleta}")
         boleta = obtener_boleta_por_numero(numero_boleta)
-        app.logger.info(f"boleta: {boleta}")
+        app.logger.info(f"Boleta obtenida: {boleta}")
         if boleta is None:
             app.logger.error("Error al obtener las boletas de la API externa")
             return "Error al obtener las boletas de la API externa", 500
@@ -323,7 +325,6 @@ def devolucion_boleta_id(numero_boleta):
     except Exception as e:
         app.logger.error(f"Error en la función devolucion_boleta_id: {str(e)} de boleta {numero_boleta}")
         return f"Error en la función devolucion_boleta_id: {str(e)}, de boleta: {numero_boleta} tipo: {type(numero_boleta)}", 500
-
 
 if __name__ == '__main__':
    app.run(host='0.0.0.0', port=5000, debug=True)

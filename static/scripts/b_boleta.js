@@ -272,4 +272,7 @@ $('#myModal').on('show.bs.modal', function (event) {
     modal.find('.modal-body .card-text:eq(2)').text(`Total: $${total}`);
     modal.find('.modal-body .card-text:eq(0)').text(`Fecha de Emision: ${fecha_emision}`);
     modal.find('.modal-body .card-text:eq(3)').text(`Estado : ${estado}`);
+	
+	const devoLink = modal.find('#devoLink');
+    devoLink.attr('href', `/devolucion/${numero_boleta}`);
 });
