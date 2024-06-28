@@ -53,26 +53,27 @@ function createCard(boleta) {
 
     const cardTextFecha = document.createElement('p');
     cardTextFecha.className = 'card-text';
-    cardTextFecha.textContent = `Fecha: ${boleta.fecha_emision}`;
+    cardTextFecha.textContent = `Fecha: ${boleta.Fecha_emision}`;
 
     const cardTextNombre = document.createElement('p');
     cardTextNombre.className = 'card-text';
-    cardTextNombre.textContent = `Nombre Comprador: ${boleta.cliente}`;
+    cardTextNombre.textContent = `Cliente: ${boleta.Cliente}`;
 
     const cardTextRUT = document.createElement('p');
     cardTextRUT.className = 'card-text';
-    cardTextRUT.textContent = `Total: ${boleta.total}`;
+    cardTextRUT.textContent = `Total: $${boleta.Total}`;
 
     const button = document.createElement('a');
     button.className = 'btn btn-select';
     button.textContent = 'Seleccionar';
-    button.setAttribute('href', `/devolucion/${boleta.numero_boleta}`);
     button.setAttribute('data-bs-toggle', 'modal');
     button.setAttribute('data-bs-target', '#myModal');
     button.setAttribute('data-numero_boleta', boleta.Numero_boleta);
-    button.setAttribute('data-nombre_comprador', boleta.fecha_emision);
-    button.setAttribute('data-rut_comprador', boleta.cliente);
-    button.setAttribute('data-fecha', boleta.total);
+    button.setAttribute('data-cliente', boleta.Cliente);
+    button.setAttribute('data-items_boleta', boleta.Items_boleta);
+    button.setAttribute('data-estado', boleta.Estado);
+    button.setAttribute('data-total', boleta.Total);
+    button.setAttribute('data-fecha_emision', boleta.Fecha_emision);
 
     cardBody.appendChild(cardTitle);
     cardBody.appendChild(cardTextFecha);
@@ -139,7 +140,53 @@ function goToNextPage() {
 document.getElementById('previousPageBtn').addEventListener('click', goToPreviousPage);
 document.getElementById('nextPageBtn').addEventListener('click', goToNextPage);
 
-// Validación de formulario
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("form-filt");
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        filtro_boletas();
+    });
+});
+
+function filtro_boletas() {
+    const numeroBoleta = document.getElementById("id_compra").value.trim();
+    const fechaEmision = document.getElementById("calend-compra").value;
+
+    const boletas = document.querySelectorAll("#div-grid-bol .card");
+
+    boletas.forEach(boleta => {
+        const boletaNumero = boleta.querySelector(".card-title").textContent.replace('Nro. Boleta: ', '').trim();
+        const boletaFecha = boleta.querySelector(".card-text").textContent.replace('Fecha de emision: ', '').trim();
+
+
+        const matchesNumero = !numeroBoleta || boletaNumero.includes(numeroBoleta);
+        // Convert the date format from 'yyyy-mm-dd' to Date object for comparison
+        const formattedBoletaFecha = boletaFecha.split(' ')[1];
+        const boletaFechaObj = new Date(formattedBoletaFecha);
+        const inputFechaObj = new Date(fechaEmision);
+
+        const matchesFecha = !fechaEmision || (inputFechaObj.toDateString() === boletaFechaObj.toDateString());
+
+        if (matchesNumero && matchesFecha) {
+            boleta.style.display = "block";
+        } else {
+            boleta.style.display = "none";
+        }
+    });
+}
+
+function filtro_nroBoleta() {
+    const input = document.getElementById("id_compra");
+    const pattern = /^\d+$/;
+    if (input.value && !pattern.test(input.value)) {
+        input.setCustomValidity("Debe colocar un número!");
+    } else {
+        input.setCustomValidity("");
+    }
+}
+
+//validación de formulario
 calendar.addEventListener("blur", function (event) {
     if (calendar.checkValidity() === false) {
         calendar.classList.remove("is-valid");
@@ -212,17 +259,17 @@ form.addEventListener("submit", function (event) {
 $('#myModal').on('show.bs.modal', function (event) {
     const button = $(event.relatedTarget);
     const numero_boleta = button.data('numero_boleta');
-    const fecha_emision = button.data('fecha_emision');
     const cliente = button.data('cliente');
+    const items_boleta = button.data('items_boleta');
+    const estado = button.data('estado');
     const total = button.data('total');
+    const fecha_emision = button.data('fecha_emision');
 
     const modal = $(this);
-    // modal.find('.modal-title').text(`Boleta ${id}`);
-    modal.find('.modal-body .card-title').text(`Nro. Boleta: ${numero_boleta}`);
-    modal.find('.modal-body .card-text:eq(0)').text(`Nombre Comprador: ${cliente}`);
-    modal.find('.modal-body .card-text:eq(1)').text(`Fecha Emision: ${fecha_emision}`);
-    modal.find('.modal-body .card-text:eq(2)').text(`Total: ${total}`);    
-    
-    const devoLink = modal.find('#devoLink');
-    devoLink.attr('href', `/devolucion/${numero_boleta}`);
+    modal.find('.modal-title').text(`Boleta ${numero_boleta}`);
+    modal.find('.modal-body .card-title').text(`Cliente: ${cliente}`);
+    modal.find('.modal-body .card-text:eq(1)').text(`Productos: ${items_boleta}`);
+    modal.find('.modal-body .card-text:eq(2)').text(`Total: $${total}`);
+    modal.find('.modal-body .card-text:eq(0)').text(`Fecha de Emision: ${fecha_emision}`);
+    modal.find('.modal-body .card-text:eq(3)').text(`Estado : ${estado}`);
 });
