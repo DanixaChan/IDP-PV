@@ -14,14 +14,16 @@ async function obtenerDatosDespacho() {
             throw new Error('Error al obtener los datos');
         }
         const result = await response.json();
-        console.log(result); // Agregar esta línea para ver los datos recibidos
+        console.log(result); // Verifica los datos recibidos en la consola
         data = result;
-        showPage(currentPage);
+        showPage(currentPage); // Llama a showPage después de obtener los datos
     } catch (error) {
         console.error('Error al obtener los datos:', error);
     }
 }
 
+// Inicializar la primera página
+obtenerDatosDespacho();
 function createCard(despacho) {
     const card = document.createElement('div');
     card.className = 'card mt-2 col-md-3';
@@ -106,8 +108,6 @@ function updatePagination(page) {
     }
 }
 
-// Inicializar la primera página
-obtenerDatosDespacho();
 
 function goToPreviousPage() {
     if (currentPage > 1) {
