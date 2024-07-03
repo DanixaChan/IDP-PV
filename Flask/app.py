@@ -1,4 +1,6 @@
-from flask import Flask, jsonify, request, send_from_directory, render_template, url_for
+# app.py
+
+from flask import Flask, jsonify, request, send_from_directory, render_template, url_for, flash, redirect
 import os
 import requests
 from config import Config
@@ -10,6 +12,7 @@ template_dir = os.path.abspath('../templates')
 app = Flask(__name__, template_folder=template_dir, static_folder='../static')
 template_dir = "templates"
 app.config.from_object(Config)
+app.secret_key = 'b5ef12e40e6bfe40350717229ceacf007a07f37e423f1cbd'  # Necesario para usar flash messages
 db.init_app(app)
 swagger = Swagger(app)
 
@@ -50,8 +53,28 @@ def gboleta():
 def godespacho():
     return render_template('go_despacho.html')
 
-@app.route('/login')
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwb3N0dmVudGEiOiJ0b2tlbl9wb3N0dmVudGEifQ.WzZv3qmDOwup9c_n0mF-wfS6cS_whTGrpqhfDXIy-3g'
+
+        data = {
+            'username': username,
+            'password': password,
+            'token': token
+        }
+
+        response = requests.post('https://qic534o8o0.execute-api.us-east-1.amazonaws.com/validacionUsuarios/', json=data)
+
+        if response.status_code == 200 and response.json().get('valid', False):
+            flash('Login exitoso', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash('Login fallido, por favor verifica tus credenciales', 'danger')
+
     return render_template('login.html')
 
 @app.route('/register')
