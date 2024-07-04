@@ -7,7 +7,7 @@ class Boleta(db.Model):
     numero_boleta = db.Column(db.String(50), unique=True, nullable=False)
     fecha_emision = db.Column(db.Date, nullable=False)
     cliente = db.Column(db.String(100), nullable=False)
-    items_boleta = db.Column(db.String(1), nullable=False)
+    items_boleta = db.Column(db.String(500), nullable=False)
     total = db.Column(db.Float, nullable=False)
     estado = db.Column(db.String(50), nullable=False)
 
@@ -42,4 +42,15 @@ class Despacho(db.Model):
             'id_compra': self.id_compra,
             'direccion_compra': self.direccion_compra,
             'valor_compra': self.valor_compra
+        }
+class Stock(db.Model):
+    id_prod = db.Column(db.Integer, primary_key=True)
+    nombre_producto = db.Column(db.String(50), nullable=False)
+    cantidad_producto = db.Column(db.Integer, nullable=False)
+    
+    def to_dict(self):
+        return {
+            'id_prod': self.id_prod,
+            'nombre_producto': self.nombre_producto,
+            'cantidad_producto': self.cantidad_producto
         }
