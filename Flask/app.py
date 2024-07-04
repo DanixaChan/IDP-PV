@@ -1,5 +1,5 @@
 # app.py
-
+import logging
 from flask import Flask, jsonify, request, send_from_directory, render_template, url_for, flash, redirect
 import os
 import requests
@@ -81,9 +81,48 @@ def login():
 def register():
     return render_template('register.html')
 
-@app.route('/devolucion')
-def devolucion():
-    return render_template('devolucion.html')
+# Ruta para mostrar la página de devolución
+@app.route('/devolucion/<numero_boleta>', methods=['GET'])
+def devolucion(numero_boleta):
+    # Busca la boleta por el ID
+    boleta = Boleta.query.filter_by(numero_boleta=numero_boleta).first()
+    print("BOLETA DETECTADA")
+    print(boleta, numero_boleta)
+    if not boleta:
+        return jsonify({'message': 'Boleta no encontrada'}), 404
+    
+    # Renderiza la plantilla 'devolucion.html' pasando los datos necesarios
+    return render_template('devolucion.html', boleta=boleta.to_dict(), numero_boleta=numero_boleta)
+
+@app.route('/procesar_devolucion', methods=['POST'])
+def procesar_devolucion():
+    data = request.json
+    items_boleta = data.get('items_boleta')
+    print("items data: ", items_boleta)
+
+    # Buscar la boleta por items_boleta
+    boleta = Boleta.query.filter_by(items_boleta=items_boleta).first()
+    print("Items_boleta= ",boleta)
+
+    if not boleta:
+        return jsonify({'message': 'Boleta no encontrada'}), 404
+
+    # Buscar la entrada de Stock correspondiente (asumo que tienes alguna clave de relación entre Boleta y Stock)
+    entrada_stock = Stock.query.filter_by(nombre_producto=boleta.items_boleta).first()
+
+    if not entrada_stock:
+        return jsonify({'message': 'Entrada de Stock no encontrada para la boleta'}), 404
+
+    # Actualizar la cantidad_producto
+    nueva_cantidad = entrada_stock.cantidad_producto + 1
+    entrada_stock.cantidad_producto = nueva_cantidad
+
+    # Commit a la base de datos
+    db.session.commit()
+
+    return jsonify({
+        'message': f'Se ha aumentado la cantidad_producto para la boleta con id {boleta.id}'
+    }), 200
 
 # Funciones para obtener datos desde las APIs
 def obtener_boletas_externas():
@@ -123,17 +162,28 @@ def almacenar_boletas_en_interna(boletas):
      200:
             description: Se almacena las boletas obtenidas hacia la BD
     """
-    for boleta in boletas:
-        nueva_boleta = Boleta(
-            numero_boleta=boleta['numero_boleta'],
-            fecha_emision=boleta['fecha_emision'],
-            cliente=boleta['cliente'],
-            items_boleta=boleta['items_boleta'],
-            total=boleta['total'],
-            estado=boleta['estado']
-        )
-        db.session.add(nueva_boleta)
-    db.session.commit()
+    try:
+        with db.session.no_autoflush:
+            for boleta in boletas:
+                # No se verifica la existencia previa, se permite duplicados
+                items_boleta = boleta['Items_boleta']
+                if len(items_boleta) > 500:  # Ajustar el valor según el tamaño permitido
+                    items_boleta = items_boleta[:500]
+                
+                nueva_boleta = Boleta(
+                    numero_boleta=boleta['Numero_boleta'],
+                    fecha_emision=boleta['Fecha_emision'],
+                    cliente=boleta['Cliente'],
+                    items_boleta=items_boleta,
+                    total=boleta['Total'],
+                    estado=boleta['Estado']
+                )
+                db.session.add(nueva_boleta)
+            db.session.commit()
+        logging.info("Todas las boletas han sido almacenadas exitosamente")
+    except Exception as e:
+        logging.error(f"Error al almacenar las boletas: {e}")
+        db.session.rollback()
 
 def almacenar_ordenes_despacho_en_interna(ordenes):
     """
@@ -342,7 +392,7 @@ def devolucion_boleta_id(numero_boleta):
         if boleta is None:
             app.logger.error("Error al obtener las boletas de la API externa")
             return "Error al obtener las boletas de la API externa", 500
-        
+
         app.logger.info(f"Boleta obtenida: {boleta}")
         return render_template('devolucion.html', boleta=boleta)
     except Exception as e:
