@@ -54,6 +54,7 @@ body::before {
 }
 
 .card {
+    height: auto !important;
     border: 15px double #09967fd4 !important;
     border-radius: 15px !important;
 }
@@ -77,12 +78,12 @@ body::before {
     background-color: #ffffff;
     border:15px solid #ffffff !important;
     position: relative;
-    top: 5%;
+    bottom: 10%;
 }
 
 #text-container{
     background-color: #ffffff;
     border:15px solid #ffffff !important;
     position: relative;
-    top: 5%;
+    bottom: 10%;
 }
