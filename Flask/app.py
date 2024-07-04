@@ -4,7 +4,7 @@ from flask import Flask, jsonify, request, send_from_directory, render_template,
 import os
 import requests
 from config import Config
-from models import db, Boleta, Despacho
+from models import db, Boleta, Despacho, Stock
 from flasgger import Swagger
 
 # Configuración de la aplicación Flask
