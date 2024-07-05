@@ -1,3 +1,4 @@
+# models.py
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -54,3 +55,9 @@ class Stock(db.Model):
             'nombre_producto': self.nombre_producto,
             'cantidad_producto': self.cantidad_producto
         }
+
+# models.py
+
+class User:
+    def __init__(self, username):
+        self.username = username

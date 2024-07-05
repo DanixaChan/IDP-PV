@@ -1,11 +1,14 @@
 # app.py
 import logging
-from flask import Flask, jsonify, request, send_from_directory, render_template, url_for, flash, redirect
+from flask import Flask, jsonify, request, send_from_directory, render_template, url_for, flash, redirect, session
 import os
 import requests
 from config import Config
 from models import db, Boleta, Despacho, Stock
 from flasgger import Swagger
+from flask_login import LoginManager, login_user
+from models import User
+import json
 
 # Configuración de la aplicación Flask
 template_dir = os.path.abspath('../templates')
@@ -15,6 +18,19 @@ app.config.from_object(Config)
 app.secret_key = 'b5ef12e40e6bfe40350717229ceacf007a07f37e423f1cbd'  # Necesario para usar flash messages
 db.init_app(app)
 swagger = Swagger(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+# Clase de usuario (simulación)
+class User:
+    def __init__(self, username):
+        self.username = username
+
+# Función para cargar el usuario
+@login_manager.user_loader
+def load_user(username):
+    return User(username)
 
 # Crear todas las tablas en la base de datos
 with app.app_context():
@@ -54,6 +70,7 @@ def godespacho():
     return render_template('go_despacho.html')
 
 
+# Página de inicio de sesión
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -67,15 +84,57 @@ def login():
             'token': token
         }
 
-        response = requests.post('https://qic534o8o0.execute-api.us-east-1.amazonaws.com/validacionUsuarios/', json=data)
+        try:
+            response = requests.post('https://qic534o8o0.execute-api.us-east-1.amazonaws.com/validacionUsuarios/', json=data)
+            response.raise_for_status()  # Lanza un error si el status code no es 200
 
-        if response.status_code == 200 and response.json().get('valid', False):
-            flash('Login exitoso', 'success')
-            return redirect(url_for('index'))
-        else:
-            flash('Login fallido, por favor verifica tus credenciales', 'danger')
+            if response.status_code == 200 and response.json().get('valid', False):
+                session['username'] = username
+                flash('Login exitoso', 'success')
+                return redirect(url_for('protected_route'))
+            else:
+                flash('Login fallido, por favor verifica tus credenciales', 'danger')
+
+        except requests.exceptions.ConnectionError:
+            flash('Error de conexión con el servidor de validación. Por favor, intenta más tarde.', 'danger')
+        except requests.exceptions.Timeout:
+            flash('La solicitud al servidor de validación ha excedido el tiempo de espera. Por favor, intenta más tarde.', 'danger')
+        except requests.exceptions.RequestException as e:
+            flash(f'Error inesperado: {e}', 'danger')
 
     return render_template('login.html')
+
+# Ruta protegida
+@app.route('/protected', methods=['GET'])
+def protected_route():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    headers = {
+        'Authorization': 'Bearer 7dgAzUQ5pq5kNI5vDByyE5Zui9riDwXXaBhCBCCH'
+    }
+
+    try:
+        response = requests.get('https://qic534o8o0.execute-api.us-east-1.amazonaws.com/postventa/todos_los_datos', headers=headers)
+        response.raise_for_status()  # Lanza un error si el status code no es 200
+
+        if response.status_code == 200:
+            data = response.json()
+            return render_template('protected.html', data=data)
+        else:
+            flash('Error al obtener los datos protegidos', 'danger')
+            return redirect(url_for('login'))
+
+    except requests.exceptions.ConnectionError:
+        flash('Error de conexión con el servidor de datos protegidos. Por favor, intenta más tarde.', 'danger')
+        return redirect(url_for('login'))
+    except requests.exceptions.Timeout:
+        flash('La solicitud al servidor de datos protegidos ha excedido el tiempo de espera. Por favor, intenta más tarde.', 'danger')
+        return redirect(url_for('login'))
+    except requests.exceptions.RequestException as e:
+        flash(f'Error inesperado: {e}', 'danger')
+        return redirect(url_for('login'))
+
 
 @app.route('/register')
 def register():
