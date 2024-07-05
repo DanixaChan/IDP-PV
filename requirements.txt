@@ -3,3 +3,4 @@ Flask-SQLAlchemy
 requests
 pymysql
 flasgger
+beautifulsoup4
