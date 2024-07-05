@@ -70,19 +70,18 @@ def gboleta():
 def godespacho():
     return render_template('go_despacho.html')
 
-
-# Página de inicio de sesión
+# Login verificado
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwb3N0dmVudGEiOiJ0b2tlbl9wb3N0dmVudGEifQ.WzZv3qmDOwup9c_n0mF-wfS6cS_whTGrpqhfDXIy-3g'
+        login_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwb3N0dmVudGEiOiJ0b2tlbl9wb3N0dmVudGEifQ.WzZv3qmDOwup9c_n0mF-wfS6cS_whTGrpqhfDXIy-3g'
 
         data = {
             'username': username,
             'password': password,
-            'token': token
+            'token': login_token
         }
 
         try:
@@ -121,8 +120,9 @@ def protected_route():
     if 'username' not in session:
         return redirect(url_for('login'))
 
+    server_token = '7dgAzUQ5pq5kNI5vDByyE5Zui9riDwXXaBhCBCCH'
     headers = {
-        'Authorization': 'Bearer 7dgAzUQ5pq5kNI5vDByyE5Zui9riDwXXaBhCBCCH'
+        'x-api-key': server_token
     }
 
     try:
@@ -131,7 +131,7 @@ def protected_route():
 
         if response.status_code == 200:
             data = response.json()
-            return render_template('protected.html', data=data)
+            return render_template('b_boletas.html', data=data)  # Renderiza b_boletas.html con los datos recibidos
         else:
             flash('Error al obtener los datos protegidos', 'danger')
             return redirect(url_for('login'))
