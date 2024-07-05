@@ -9,6 +9,7 @@ from flasgger import Swagger
 from flask_login import LoginManager, login_user
 from models import User
 import json
+from bs4 import BeautifulSoup  # Para parsear HTML
 
 # Configuración de la aplicación Flask
 template_dir = os.path.abspath('../templates')
@@ -88,12 +89,22 @@ def login():
             response = requests.post('https://qic534o8o0.execute-api.us-east-1.amazonaws.com/validacionUsuarios/', json=data)
             response.raise_for_status()  # Lanza un error si el status code no es 200
 
-            if response.status_code == 200 and response.json().get('valid', False):
-                session['username'] = username
-                flash('Login exitoso', 'success')
-                return redirect(url_for('protected_route'))
+            print(f"Response status code: {response.status_code}")
+            print(f"Response text: {response.text}")
+
+            if response.status_code == 200:
+                # Parsear la respuesta HTML para determinar si el login fue exitoso
+                soup = BeautifulSoup(response.text, 'html.parser')
+                success_message = soup.find('h1', text='Éxito')
+
+                if success_message:
+                    session['username'] = username
+                    flash('Login exitoso', 'success')
+                    return redirect(url_for('protected_route'))
+                else:
+                    flash('Login fallido, por favor verifica tus credenciales', 'danger')
             else:
-                flash('Login fallido, por favor verifica tus credenciales', 'danger')
+                flash('Error en la validación del servidor', 'danger')
 
         except requests.exceptions.ConnectionError:
             flash('Error de conexión con el servidor de validación. Por favor, intenta más tarde.', 'danger')
@@ -115,7 +126,7 @@ def protected_route():
     }
 
     try:
-        response = requests.get('https://qic534o8o0.execute-api.us-east-1.amazonaws.com/postventa/todos_los_datos', headers=headers)
+        response = requests.get('https://qic534o8o0.execute-api.us-east-1.amazonaws.com/postventa/', headers=headers)
         response.raise_for_status()  # Lanza un error si el status code no es 200
 
         if response.status_code == 200:
@@ -134,6 +145,7 @@ def protected_route():
     except requests.exceptions.RequestException as e:
         flash(f'Error inesperado: {e}', 'danger')
         return redirect(url_for('login'))
+
 
 
 @app.route('/register')
