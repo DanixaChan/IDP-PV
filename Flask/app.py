@@ -218,7 +218,7 @@ def obtener_ordenes_despacho_externas():
      200:
             description: Se obtiene las ordenes de despacho a partir de otro endpoint
     """
-    response = requests.get(app.config['API_DESPACHO_URL'])
+    response = requests.get(app.config['API_DESPACHOS_URL'])
     if response.status_code == 200:
         return response.json()
     else:
@@ -264,18 +264,25 @@ def almacenar_ordenes_despacho_en_interna(ordenes):
      200:
             description: Se almacena las boletas obtenidas hacia la BD
     """
-    for orden in ordenes:
-        nuevo_despacho = Despacho(
-            fecha_despacho=orden['fecha_despacho'],
-            patente_camion=orden['patente_camion'],
-            intento=orden['intento'],
-            entregado=orden['entregado'],
-            id_compra=orden['id_compra'],
-            direccion_compra=orden['direccion_compra'],
-            valor_compra=orden['valor_compra']
-        )
-        db.session.add(nuevo_despacho)
-    db.session.commit()
+    try:
+        ordenes_list = ordenes.get('results', [])
+        with db.session.no_autoflush:
+            for orden in ordenes_list:
+                 nuevo_despacho = Despacho(
+                     fecha_despacho=orden['fecha_despacho'],
+                     patente_camion=orden['patente_camion'],
+                     intento=orden['intento'],
+                     entregado=orden['entregado'],
+                     id_compra=orden['id_compra'],
+                     direccion_compra=orden['direccion_compra'],
+                     valor_compra=orden['valor_compra']
+                 )
+                 db.session.add(nuevo_despacho)
+            db.session.commit()
+    except Exception as e:
+        logging.error(f"Error al almacenar ordenes de despacho: {e}")
+        db.session.rollback()
+
 
 # Rutas para sincronizar los datos con la base de datos
 @app.route('/sincronizar_boletas')
